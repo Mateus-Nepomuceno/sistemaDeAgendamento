@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anotações</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card { border-radius: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Minhas Anotações</h1>
+            <a href="{% url 'anotacao_criar' %}" class="btn btn-primary">Nova Anotação</a>
+        </div>
+
+        <form method="GET" class="row g-3 mb-4">
+            <div class="col-md-6">
+                <input type="text" name="q" class="form-control" 
+                       placeholder="Buscar por título, descrição ou funcionário..." 
+                       value="{{ request.GET.q|default:'' }}">
+            </div>
+            <div class="col-md-3">
+                <select name="ordenar" class="form-select">
+                    <option value="">Ordenar por...</option>
+                    <option value="data" {% if request.GET.ordenar == 'data' %}selected{% endif %}>Data (antiga para nova)</option>
+                    <option value="-data" {% if request.GET.ordenar == '-data' %}selected{% endif %}>Data (nova para antiga)</option>
+                    <option value="titulo" {% if request.GET.ordenar == 'titulo' %}selected{% endif %}>Título (A-Z)</option>
+                    <option value="titulo_desc" {% if request.GET.ordenar == 'titulo_desc' %}selected{% endif %}>Título (Z-A)</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-outline-primary w-100">Buscar</button>
+            </div>
+        </form>
+
+        {% if anotacoes %}
+            <div class="row">
+                {% for anotacao in anotacoes %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ anotacao.titulo }}</h5>
+                                <p class="card-text">{{ anotacao.descricao }}</p>
+                                {% if anotacao.link %}
+                                    <a href="{{ anotacao.link }}" target="_blank" class="btn btn-sm btn-outline-primary">Acessar Link</a>
+                                {% endif %}
+                                {% if anotacao.funcionario %}
+                                    <span class="badge bg-info mt-2">Funcionário: {{ anotacao.funcionario.nome }}</span>
+                                {% endif %}
+                                <p class="text-muted small mt-2">
+                                    Criado: {{ anotacao.data_criacao|date:"d/m/Y H:i" }}
+                                    {% if anotacao.data_atualizacao %}<br>Atualizado: {{ anotacao.data_atualizacao|date:"d/m/Y H:i" }}{% endif %}
+                                </p>
+                                <div class="mt-2">
+                                    <a href="{% url 'anotacao_editar' anotacao.pk %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                    <a href="{% url 'anotacao_excluir' anotacao.pk %}" class="btn btn-sm btn-outline-danger">Excluir</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">Nenhuma anotação encontrada.</div>
+        {% endif %}
+    </div>
+</body>
+</html>
