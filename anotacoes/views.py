@@ -7,7 +7,7 @@ from .models import Anotacao
 
 class AnotacaoListView(LoginRequiredMixin, ListView):
     model = Anotacao
-    template_name = 'anotacoes/lista.html'
+    template_name = 'anotacoes/anotacoes.html'
     context_object_name = 'anotacoes'
 
     def get_queryset(self):
