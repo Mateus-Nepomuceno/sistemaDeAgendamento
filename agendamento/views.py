@@ -50,7 +50,7 @@ class AnotacaoCreateView(LoginRequiredMixin, CreateView):
         # Torna campo funcionário opcional e mostra apenas ativos
         form = super().get_form(form_class)
         form.fields['funcionario'].required = False
-        form.fields['funcionario'].queryset = Funcionario.objects.filter(ativo=True)
+        form.fields['funcionario'].queryset = Funcionario.objects.filter(status='ativo')#alterei a parte (ativo=true) para (status='ativo')
         return form
 
     def form_valid(self, form):
@@ -73,7 +73,7 @@ class AnotacaoUpdateView(LoginRequiredMixin, UpdateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields['funcionario'].required = False
-        form.fields['funcionario'].queryset = Funcionario.objects.filter(ativo=True)
+        form.fields['funcionario'].queryset = Funcionario.objects.filter(status='ativo') #alterei a parte (ativo=true) para (status='ativo')
         return form
 
 

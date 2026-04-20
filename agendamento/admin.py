@@ -9,9 +9,9 @@ class AnotacaoAdmin(admin.ModelAdmin):
     list_filter = ['data_criacao']
     search_fields = ['titulo', 'descricao']
 
-
+#adicionado nosvos campos no display, filtro e pesquisa
 @admin.register(Funcionario)
 class FuncionarioAdmin(admin.ModelAdmin):
-    list_display = ['nome', 'cargo', 'email', 'ativo']
-    list_filter = ['ativo', 'cargo']
-    search_fields = ['nome', 'email']
+    list_display = ['nome', 'tipo', 'matricula', 'cargo', 'email', 'status', 'proxima_progressao']
+    list_filter = ['tipo','status','cargo','ano_avaliado', 'proxima_progressao']
+    search_fields = ['nome','matricula','processo', 'email','cargo']
