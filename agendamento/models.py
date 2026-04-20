@@ -1,24 +1,17 @@
-# models.py
 from django.db import models
 from django.contrib.auth.models import User
 
 
 class Anotacao(models.Model):
-    """Modelo para armazenar anotações dos usuários."""
-    
     titulo = models.CharField(max_length=200, verbose_name='Título')
     descricao = models.TextField(verbose_name='Descrição')
     link = models.URLField(blank=True, null=True, verbose_name='Link')
     
-    # Data automática - preenchida na criação
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
-    # Data automática - atualizada a cada edição
     data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Última Atualização')
     
-    # Relacionamento com usuário (se usuário for deletado, anotações são excluídas)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='anotacoes')
     
-    # Relacionamento opcional com funcionário
     funcionario = models.ForeignKey('Funcionario', on_delete=models.SET_NULL, blank=True, null=True, related_name='anotacoes')
 
     class Meta:
@@ -30,9 +23,7 @@ class Anotacao(models.Model):
         return self.titulo
 
 
-class Funcionario(models.Model):
-    """Modelo para cadastrar funcionários (docentes e tecnicos)."""
-    
+class Funcionario(models.Model):    
     TIPO_CHOICES = [
         ('docente','Docente'),('tecnico','Tecnico'),
     ]
@@ -43,7 +34,7 @@ class Funcionario(models.Model):
     ano_avaliado=models.DateField(blank=True,null=True)
     matricula=models.CharField(max_length=50,blank=True,null=True)
     proxima_progressao=models.DateField(blank=True,null=True)
-    status=models.CharField(max_length=50,choices=[('ativo','Ativo'),('inativo','Inativo'),('em_progressao','Em Progressao')], default='ativo') # troquei o campo ativo por status
+    status=models.CharField(max_length=50,choices=[('ativo','Ativo'),('inativo','Inativo'),('em_progressao','Em Progressao')], default='ativo')
     observacoes=models.TextField(blank=True,null=True)
     tipo=models.CharField(max_length=20,choices=TIPO_CHOICES)
     email = models.EmailField(blank=True, null=True, verbose_name='Email')
