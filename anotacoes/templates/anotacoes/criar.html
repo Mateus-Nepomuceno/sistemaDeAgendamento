@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Anotação</title>
+    <title>Nova Anotação</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .form-control, .form-select { border-radius: 8px; padding: 10px 15px; }
@@ -15,28 +15,24 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header"><h4>Editar Anotação</h4></div>
+                    <div class="card-header"><h4>Nova Anotação</h4></div>
                     <div class="card-body">
                         <form method="post">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label class="form-label">Título</label>
-                                <input type="text" name="titulo" class="form-control" value="{{ form.titulo.value }}" required>
+                                <input type="text" name="titulo" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Descrição</label>
-                                <textarea name="descricao" class="form-control" rows="5" required>{{ form.descricao.value }}</textarea>
+                                <textarea name="descricao" class="form-control" rows="5" required></textarea>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Link (opcional)</label>
-                                <input type="url" name="link" class="form-control" value="{{ form.link.value|default:'' }}">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Funcionário (opcional)</label>
-                                {{ form.funcionario }}
+                                <input type="url" name="link" class="form-control">
                             </div>
                             <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                                <button type="submit" class="btn btn-primary">Salvar</button>
                                 <a href="{% url 'anotacao_lista' %}" class="btn btn-secondary">Cancelar</a>
                             </div>
                         </form>

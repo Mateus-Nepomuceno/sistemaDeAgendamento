@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('agendamento', '0002_anotacao_data_atualizacao'),
+        ('anotacoes', '0002_anotacao_data_atualizacao'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='anotacao',
             name='funcionario',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='anotacoes', to='agendamento.funcionario'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='anotacoes', to='anotacoes.funcionario'),
         ),
         migrations.AlterField(
             model_name='anotacao',

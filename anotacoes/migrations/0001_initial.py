@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('link', models.URLField(blank=True, null=True, verbose_name='Link')),
                 ('data_criacao', models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')),
                 ('usuario', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='anotacoes', to=settings.AUTH_USER_MODEL, verbose_name='Usuário')),
-                ('funcionario', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='anotacoes', to='agendamento.funcionario', verbose_name='Funcionário')),
+                ('funcionario', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='anotacoes', to='anotacoes.funcionario', verbose_name='Funcionário')),
             ],
             options={
                 'verbose_name': 'Anotação',

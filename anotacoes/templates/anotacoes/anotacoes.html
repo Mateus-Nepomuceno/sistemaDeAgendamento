@@ -19,7 +19,7 @@
         <form method="GET" class="row g-3 mb-4">
             <div class="col-md-6">
                 <input type="text" name="q" class="form-control" 
-                       placeholder="Buscar por título, descrição ou funcionário..." 
+                       placeholder="Buscar por título ou descrição..." 
                        value="{{ request.GET.q|default:'' }}">
             </div>
             <div class="col-md-3">
@@ -46,9 +46,6 @@
                                 <p class="card-text">{{ anotacao.descricao }}</p>
                                 {% if anotacao.link %}
                                     <a href="{{ anotacao.link }}" target="_blank" class="btn btn-sm btn-outline-primary">Acessar Link</a>
-                                {% endif %}
-                                {% if anotacao.funcionario %}
-                                    <span class="badge bg-info mt-2">Funcionário: {{ anotacao.funcionario.nome }}</span>
                                 {% endif %}
                                 <p class="text-muted small mt-2">
                                     Criado: {{ anotacao.data_criacao|date:"d/m/Y H:i" }}
