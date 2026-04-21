@@ -7,8 +7,8 @@ from .models import Funcionario
 
 class DocenteListView(LoginRequiredMixin, ListView):
     model = Funcionario
-    template_name = 'cadastro/index.html'
-    context_object_name = 'funcionarios'
+    template_name = 'cadastros/index.html'
+    context_object_name = 'docentes'
 
     def get_queryset(self):
         lista = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
@@ -25,11 +25,11 @@ class DocenteListView(LoginRequiredMixin, ListView):
 
 class DocenteCreateView(LoginRequiredMixin, CreateView):
     model = Funcionario
-    template_name = 'cadastro/criar.html'
+    template_name = 'cadastros/criar.html'
     fields = [
         'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'tipo', 'email', 'progrediu'
     ]
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('cadastros:index')
 
     def form_valid(self, form):
         form.instance.tipo = Funcionario.Tipo.DOCENTE
@@ -41,11 +41,11 @@ class DocenteCreateView(LoginRequiredMixin, CreateView):
 class DocenteUpdateView(LoginRequiredMixin, UpdateView):
     model = Funcionario
     queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
-    template_name = 'cadastro/editar.html'
+    template_name = 'cadastros/editar.html'
     fields = [
         'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'email'
     ]
-    success_url= reverse_lazy('index')
+    success_url= reverse_lazy('cadastros:index')
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
@@ -53,8 +53,8 @@ class DocenteUpdateView(LoginRequiredMixin, UpdateView):
 class DocenteDeleteView(LoginRequiredMixin, DeleteView):
     model = Funcionario
     queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
-    template_name = 'cadastro/excluir.html'
-    success_url= reverse_lazy('index')
+    template_name = 'cadastros/excluir.html'
+    success_url= reverse_lazy('cadastros:index')
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])

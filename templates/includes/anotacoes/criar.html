@@ -8,7 +8,7 @@
             </div>
             
             <div class="modal-body p-4">
-                <form method="post" action="{% url 'anotacao_criar' %}">
+                <form method="post" action="{% url 'anotacoes:anotacao_criar' %}">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label class="form-label fw-bold">Título</label>

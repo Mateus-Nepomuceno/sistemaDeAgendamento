@@ -12,7 +12,7 @@ class Funcionario(models.Model):
     ]
 
     nome = models.CharField(max_length=100, verbose_name='Nome')
-    cargo = models.CharField(max_length=100, verbose_name='Cargo', null=True)
+    cargo = models.CharField(max_length=100, verbose_name='Cargo', blank=True, null=True)
     processo = models.CharField(max_length=100)
     ano_avaliado = models.DateField()
     matricula = models.CharField(max_length=50,)

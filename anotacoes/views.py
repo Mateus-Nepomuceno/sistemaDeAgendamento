@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.http import HttpResponseNotAllowed
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -35,32 +35,32 @@ class AnotacaoListView(LoginRequiredMixin, ListView):
 class AnotacaoCreateView(LoginRequiredMixin, CreateView):
     model = Anotacao
     fields = ['titulo', 'descricao', 'link']
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('anotacoes:index')
 
     def form_valid(self, form):
         form.instance.usuario = self.request.user
         return super().form_valid(form)
 
     def get(self, request, *args, **kwargs):
-        return redirect('index')
-
+        return HttpResponseNotAllowed(['POST'])
+    
 class AnotacaoUpdateView(LoginRequiredMixin, UpdateView):
     model = Anotacao
     fields = ['titulo', 'descricao', 'link']
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('anotacoes:index')
 
     def get_queryset(self):
         return Anotacao.objects.filter(usuario=self.request.user)
 
     def get(self, request, *args, **kwargs):
-        return redirect('index')
+        return HttpResponseNotAllowed(['POST'])
 
 class AnotacaoDeleteView(LoginRequiredMixin, DeleteView):
     model = Anotacao
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('anotacoes:index')
 
     def get_queryset(self):
         return Anotacao.objects.filter(usuario=self.request.user)
 
     def get(self, request, *args, **kwargs):
-        return redirect('index')
+        return HttpResponseNotAllowed(['POST'])
