@@ -1,0 +1,34 @@
+<div class="modal fade" id="modalNovaAnotacao" tabindex="-1" aria-labelledby="modalNovaAnotacaoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg"> 
+        <div class="modal-content shadow-lg border-dark rounded-4">
+            
+            <div class="modal-header bg-dark text-white rounded-top-4">
+                <h5 class="modal-title w-100 text-center" id="modalNovaAnotacaoLabel">Nova Anotação</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            
+            <div class="modal-body p-4">
+                <form method="post" action="{% url 'anotacao_criar' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Título</label>
+                        <input type="text" name="titulo" class="form-control border-dark" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Descrição</label>
+                        <textarea name="descricao" class="form-control border-dark" rows="5" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Link (opcional)</label>
+                        <input type="url" name="link" class="form-control border-dark">
+                    </div>
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-success fw-bold">Salvar Anotação</button>
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>

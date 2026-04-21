@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %} Anotações {% endblock %}
+
 {% block content %}
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="display-5 fw-bold">Minhas Anotações</h1>
-        <a href="{% url 'anotacao_criar' %}" class="btn btn-success"><i class="bi bi-plus-circle me-2"></i>Nova Anotação</a>
+        
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNovaAnotacao">
+            <i class="bi bi-plus-circle me-2"></i>Nova Anotação
+        </button>
     </div>
 
     <form method="GET" class="row g-3 mb-4">
@@ -35,15 +39,16 @@
                     <div class="card rounded-4 shadow h-100">
                         
                         <div class="card-header bg-dark pt-3 border-bottom-0 d-flex justify-content-between align-items-start">
-                            <h6 class="card-title mb-0 pe-2 text-white">{{ anotacao.titulo }}</h5>
+                            <h6 class="card-title mb-0 pe-2 text-white">{{ anotacao.titulo }}</h6>
                             
                             <div class="d-flex gap-2 flex-shrink-0">
-                                <a href="{% url 'anotacao_editar' anotacao.pk %}" class="btn btn-sm btn-light" title="Editar">
+                                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditar{{ anotacao.pk }}" title="Editar">
                                     <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <a href="{% url 'anotacao_excluir' anotacao.pk %}" class="btn btn-sm btn-light" title="Apagar">
+                                </button>
+                                
+                                <button type="button" class="btn btn-sm btn-danger   text-dark" data-bs-toggle="modal" data-bs-target="#modalExcluir{{ anotacao.pk }}" title="Apagar">
                                     <i class="bi bi-trash3-fill"></i>
-                                </a>
+                                </button>
                             </div>
                         </div>
 
@@ -65,10 +70,16 @@
                         
                     </div>
                 </div>
+                {% include 'includes/anotacoes/editar.html' %}
+                {% include 'includes/anotacoes/excluir.html' %}
+
             {% endfor %}
         </div>
     {% else %}
         <div class="alert alert-dark">Nenhuma anotação encontrada.</div>
     {% endif %}
 </div>
+
+{% include 'includes/anotacoes/criar.html' %}
+
 {% endblock %}
