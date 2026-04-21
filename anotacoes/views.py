@@ -7,7 +7,7 @@ from .models import Anotacao
 
 class AnotacaoListView(LoginRequiredMixin, ListView):
     model = Anotacao
-    template_name = 'anotacoes/anotacoes.html'
+    template_name = 'anotacoes/index.html'
     context_object_name = 'anotacoes'
 
     def get_queryset(self):
@@ -37,7 +37,7 @@ class AnotacaoCreateView(LoginRequiredMixin, CreateView):
     model = Anotacao
     template_name = 'anotacoes/criar.html'
     fields = ['titulo', 'descricao', 'link']
-    success_url = reverse_lazy('anotacao_lista')
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         form.instance.usuario = self.request.user
@@ -48,7 +48,7 @@ class AnotacaoUpdateView(LoginRequiredMixin, UpdateView):
     model = Anotacao
     template_name = 'anotacoes/editar.html'
     fields = ['titulo', 'descricao', 'link']
-    success_url = reverse_lazy('anotacao_lista')
+    success_url = reverse_lazy('index')
 
     def get_queryset(self):
         return Anotacao.objects.filter(usuario=self.request.user)
@@ -57,7 +57,7 @@ class AnotacaoUpdateView(LoginRequiredMixin, UpdateView):
 class AnotacaoDeleteView(LoginRequiredMixin, DeleteView):
     model = Anotacao
     template_name = 'anotacoes/excluir.html'
-    success_url = reverse_lazy('anotacao_lista')
+    success_url = reverse_lazy('index')
 
     def get_queryset(self):
         return Anotacao.objects.filter(usuario=self.request.user)

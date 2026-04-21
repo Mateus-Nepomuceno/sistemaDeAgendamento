@@ -7,8 +7,7 @@ class Anotacao(models.Model):
     descricao = models.TextField(verbose_name='Descrição')
     link = models.URLField(blank=True, null=True, verbose_name='Link')
     
-    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
-    data_atualizacao = models.DateTimeField(auto_now=True, verbose_name='Última Atualização')
+    data_criacao = models.DateField(auto_now_add=True, verbose_name='Data de Criação')
     
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='anotacoes')
     
