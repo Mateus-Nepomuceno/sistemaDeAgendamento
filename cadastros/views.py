@@ -2,60 +2,63 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.db.models import Q
+from django.http import HttpResponseNotAllowed, HttpResponseRedirect
 from .models import Funcionario
 
-
-"""lista_funcionarios"""
-class FuncionarioListView(LoginRequiredMixin, ListView):
-    model= Funcionario
-    template_name= 'cadastro/lista.html'
-    context_object_name= 'funcionarios'
-
+class DocenteListView(LoginRequiredMixin, ListView):
+    model = Funcionario
+    template_name = 'cadastros/index.html'
+    context_object_name = 'docentes'
 
     def get_queryset(self):
-        lista= Funcionario.objects.all()
-
-        tipo= self.request.GET.get('tipo')
-
-        if tipo:
-            lista= lista.filter(tipo=tipo)
+        lista = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
                 
-        busca= self.request.Get.get('q')
+        busca = self.request.GET.get('q')
         if busca:
-            lista=lista.filter(
-                Q(nome_icontains= busca) |
-                Q(matricula_icontains= busca) |
-                Q(cargo_icontains= busca)
+            lista = lista.filter(
+                Q(nome__icontains= busca) |
+                Q(matricula__icontains= busca) |
+                Q(cargo__icontains= busca)
             )
 
         return lista
-    
 
-
-#criar os funcionarios
-class FuncionarioCreateView(LoginRequiredMixin, CreateView):
-    model= Funcionario
-    template_name= 'cadastro/criar.html'
-    fields= [
-        'nome', 'cargo', 'processo', 'ano_avaliado', 'matricula', 'status', 'proxima_progressao', 'observacoes', 'tipo', 'email', 'telefone', 'data_contratacao'
+class DocenteCreateView(LoginRequiredMixin, CreateView):
+    model = Funcionario
+    fields = [
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'nivel', 'email'
     ]
+    success_url = reverse_lazy('cadastros:index')
 
-    success_url= reverse_lazy('funcionario_lista')
+    def form_valid(self, form):
+        form.instance.tipo = Funcionario.Tipo.DOCENTE
+        return super().form_valid(form)
 
+    def get(self, request, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
 
-
-#Editar os funcionarios
-class FuncionarioUpdateView(LoginRequiredMixin, CreateView):
-    model= Funcionario
-    template_name= 'cadastro/editar.html'
-    fields= [
-        'nome', 'cargo', 'processo', 'ano_avaliado', 'matricula', 'status', 'proxima_progressao', 'observacoes', 'tipo', 'email', 'telefone', 'data_contratacao'
+class DocenteUpdateView(LoginRequiredMixin, UpdateView):
+    model = Funcionario
+    queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
+    fields = [
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'nivel', 'email', 'ativo', 'observacoes'
     ]
+    success_url= reverse_lazy('cadastros:index')
 
-    success_url= reverse_lazy('funcionario_lista')
+    def get(self, request, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
 
-#Deletar os funcionarios
-class FuncionarioDeleteView(LoginRequiredMixin, CreateView):
-    model= Funcionario
-    template_name= 'cadastro/excluir.html'
-    success_url= reverse_lazy('funcionario_lista')
+class DocenteDeleteView(LoginRequiredMixin, DeleteView):
+    model = Funcionario
+    queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
+    success_url = reverse_lazy('cadastros:index')
+
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        self.object = self.get_object()
+        self.object.ativo = False
+        self.object.save()
+        return HttpResponseRedirect(success_url)
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])

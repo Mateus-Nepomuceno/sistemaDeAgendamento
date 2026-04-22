@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+app_name = 'anotacoes'
+
 urlpatterns = [
     path('', views.AnotacaoListView.as_view(), name='index'),
     path('criar/', views.AnotacaoCreateView.as_view(), name='anotacao_criar'),

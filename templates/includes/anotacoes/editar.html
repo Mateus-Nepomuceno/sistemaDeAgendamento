@@ -8,7 +8,7 @@
             </div>
             
             <div class="modal-body p-4">
-                <form method="post" action="{% url 'anotacao_editar' anotacao.pk %}">
+                <form method="post" action="{% url 'anotacoes:anotacao_editar' anotacao.pk %}">
                     {% csrf_token %}
                     
                     <div class="mb-3">
