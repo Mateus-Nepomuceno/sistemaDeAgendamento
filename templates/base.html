@@ -36,9 +36,17 @@
                     <img src="{% static 'img/logo_ifbaiano.webp' %}" height="100" alt="IF Baiano">
                 </a>
             {% else %}
-                <a href="{% url 'core:index' %}" class="navbar-brand d-flex align-items-center m-0">
-                    <img src="{% static 'img/logo_ifbaiano.webp' %}" height="100" alt="IF Baiano">
-                </a>
+            
+                {% if request.resolver_match.url_name == 'login' %}
+                    <a href="{% url 'core:index' %}" class="navbar-brand position-absolute top-50 start-50 translate-middle m-0">
+                        <img src="{% static 'img/logo_ifbaiano.webp' %}" height="100" alt="IF Baiano">
+                    </a>
+                {% else %}
+                    <a href="{% url 'core:index' %}" class="navbar-brand d-flex align-items-center m-0">
+                        <img src="{% static 'img/logo_ifbaiano.webp' %}" height="100" alt="IF Baiano">
+                    </a>
+                {% endif %}
+                
             {% endif %}
             
             <div id="menu">
@@ -49,7 +57,9 @@
                             <button type="submit" class="btn btn-outline-dark py-2 w-100">Sair</button>
                         </form>
                     {% else %}
-                        <a href="#" class="btn btn-outline-dark py-2">Entrar</a>
+                        {% if request.resolver_match.url_name != 'login' %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-dark py-2">Entrar</a>
+                        {% endif %}
                     {% endif %}
                 </div>          
             </div> 
