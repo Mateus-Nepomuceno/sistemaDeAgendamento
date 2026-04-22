@@ -2,7 +2,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.db.models import Q
-from django.http import HttpResponseNotAllowed
+from django.http import HttpResponseNotAllowed, HttpResponseRedirect
 from .models import Funcionario
 
 class DocenteListView(LoginRequiredMixin, ListView):
@@ -25,9 +25,8 @@ class DocenteListView(LoginRequiredMixin, ListView):
 
 class DocenteCreateView(LoginRequiredMixin, CreateView):
     model = Funcionario
-    template_name = 'cadastros/criar.html'
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'tipo', 'email', 'progrediu'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'nivel', 'email'
     ]
     success_url = reverse_lazy('cadastros:index')
 
@@ -41,9 +40,8 @@ class DocenteCreateView(LoginRequiredMixin, CreateView):
 class DocenteUpdateView(LoginRequiredMixin, UpdateView):
     model = Funcionario
     queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
-    template_name = 'cadastros/editar.html'
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'email'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'nivel', 'email', 'ativo', 'observacoes'
     ]
     success_url= reverse_lazy('cadastros:index')
 
@@ -53,8 +51,14 @@ class DocenteUpdateView(LoginRequiredMixin, UpdateView):
 class DocenteDeleteView(LoginRequiredMixin, DeleteView):
     model = Funcionario
     queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
-    template_name = 'cadastros/excluir.html'
-    success_url= reverse_lazy('cadastros:index')
+    success_url = reverse_lazy('cadastros:index')
+
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        self.object = self.get_object()
+        self.object.ativo = False
+        self.object.save()
+        return HttpResponseRedirect(success_url)
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])

@@ -1,0 +1,68 @@
+<div class="modal fade" id="modalEditar{{ docente.pk }}" tabindex="-1" aria-labelledby="modalEditarLabel{{ docente.pk }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg"> 
+        <div class="modal-content shadow-lg border-dark rounded-4">
+            
+            <div class="modal-header bg-dark text-white rounded-top-4">
+                <h5 class="modal-title w-100 text-center" id="modalEditarLabel{{ docente.pk }}">Editar Docente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            
+            <div class="modal-body p-4">
+                <form method="post" action="{% url 'cadastros:docente_editar' docente.pk %}">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Nome</label>
+                            <input type="text" name="nome" class="form-control border-dark" value="{{ docente.nome }}" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Matrícula</label>
+                            <input type="text" name="matricula" class="form-control border-dark" value="{{ docente.matricula }}" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Processo</label>
+                            <input type="text" name="processo" class="form-control border-dark" value="{{ docente.processo }}" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Nível</label>
+                            <input type="text" name="nivel" class="form-control border-dark" value="{{ docente.nivel }}" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Ano Avaliado</label>
+                            <input type="date" name="ano_avaliado" class="form-control border-dark" value="{{ docente.ano_avaliado|date:'Y-m-d' }}" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" name="email" class="form-control border-dark" value="{{ docente.email|default_if_none:'' }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Status Ativo</label>
+                            <select name="ativo" class="form-select border-dark">
+                                <option value="True" {% if docente.ativo %}selected{% endif %}>Sim</option>
+                                <option value="False" {% if not docente.ativo %}selected{% endif %}>Não</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Observações</label>
+                            <textarea name="observacoes" class="form-control border-dark" rows="3">{{ docente.observacoes|default_if_none:'' }}</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-warning fw-bold text-dark">Salvar Alterações</button>
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>

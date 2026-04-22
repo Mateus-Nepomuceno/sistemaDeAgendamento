@@ -18,7 +18,6 @@ class Funcionario(models.Model):
     matricula = models.CharField(max_length=50,)
     proxima_progressao = models.DateField(blank=True)
     ativo = models.BooleanField(verbose_name='Ativo', choices=ESCOLHA, default=True)
-    progrediu = models.BooleanField(verbose_name='Progrediu', choices=ESCOLHA, default=False)
     observacoes=models.TextField(null=True, blank=True)
     tipo = models.CharField(
         max_length=2,
@@ -30,7 +29,7 @@ class Funcionario(models.Model):
     
     def save(self, *args, **kwargs):
         if self.ano_avaliado and not self.proxima_progressao:
-            self.proxima_progressao = self.ano_avaliado + relativedelta(months=1)
+            self.proxima_progressao = self.ano_avaliado + relativedelta(years=1)
                 
         super().save(*args, **kwargs)
     
