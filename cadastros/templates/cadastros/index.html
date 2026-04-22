@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Docentes {% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5 px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-5 fw-bold">Docentes</h1>
+        
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNovoDocente">
+            <i class="bi bi-plus-circle me-2"></i>Novo Docente
+        </button>
+    </div>
+
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-9">
+            <input type="text" name="q" class="form-control border-dark" 
+                    placeholder="Buscar por nome, matrícula ou processo..." 
+                    value="{{ request.GET.q|default:'' }}">
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-dark w-100">
+                <i class="bi bi-search me-2"></i>Buscar
+            </button>
+        </div>
+    </form>
+
+    {% if docentes %}
+        <div class="table-responsive shadow rounded-3 bg-white">
+            <table class="table table-hover table-striped table-bordered align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Processo</th>
+                        <th scope="col">Ano Avaliado</th>
+                        <th scope="col">Servidor</th>
+                        <th scope="col">Matrícula</th>
+                        <th scope="col">Nível</th>
+                        <th scope="col">Próx. Progressão</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Observações</th>
+                        <th scope="col" class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for docente in docentes %}
+                        <tr>
+                            <td>{{ docente.processo|default:"-" }}</td>
+                            <td>{{ docente.ano_avaliado|date:"d/m/Y"|default:"-" }}</td>
+                            <td class="fw-semibold">{{ docente.nome }}</td>
+                            <td>{{ docente.matricula|default:"-" }}</td>
+                            <td>{{ docente.nivel|default:"-" }}</td>
+                            <td>{{ docente.proxima_progressao|date:"d/m/Y"|default:"-" }}</td>
+                            
+                            <td>
+                                {% if docente.ativo %}
+                                    <span class="badge bg-success mb-1 d-block">Ativo</span>
+                                {% else %}
+                                    <span class="badge bg-danger mb-1 d-block">Inativo</span>
+                                {% endif %}
+                            </td>
+
+                            <td style="max-width: 200px;" class="text-truncate" title="{{ docente.observacoes }}">
+                                {{ docente.observacoes|default:"" }}
+                            </td>
+
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditar{{ docente.pk }}" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    
+                                    <button type="button" class="btn btn-sm btn-danger text-dark" data-bs-toggle="modal" data-bs-target="#modalExcluir{{ docente.pk }}" title="Apagar">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% include 'includes/docentes/editar.html' %}
+                        {% include 'includes/docentes/excluir.html' %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-dark">Nenhum docente encontrado.</div>
+    {% endif %}
+</div>
+{% include 'includes/docentes/criar.html' %}
+
+{% endblock %}

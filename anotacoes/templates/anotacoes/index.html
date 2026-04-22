@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Anotações {% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-5 fw-bold">Minhas Anotações</h1>
+        
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNovaAnotacao">
+            <i class="bi bi-plus-circle me-2"></i>Nova Anotação
+        </button>
+    </div>
+
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-6">
+            <input type="text" name="q" class="form-control border-dark" 
+                    placeholder="Buscar por título ou descrição..." 
+                    value="{{ request.GET.q|default:'' }}">
+        </div>
+        <div class="col-md-3">
+            <select name="ordenar" class="form-select border-dark">
+                <option value="" disabled {% if not request.GET.ordenar %}selected{% endif %} hidden>Ordenar por...</option>
+                <option value="data" {% if request.GET.ordenar == 'data' %}selected{% endif %}>Data (antiga para nova)</option>
+                <option value="-data" {% if request.GET.ordenar == '-data' %}selected{% endif %}>Data (nova para antiga)</option>
+                <option value="titulo" {% if request.GET.ordenar == 'titulo' %}selected{% endif %}>Título (A-Z)</option>
+                <option value="titulo_desc" {% if request.GET.ordenar == 'titulo_desc' %}selected{% endif %}>Título (Z-A)</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-dark w-100"><i class="bi bi-search me-2"></i>Buscar</button>
+        </div>
+    </form>
+
+    {% if anotacoes %}
+        <div class="row">
+            {% for anotacao in anotacoes %}
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card rounded-4 shadow h-100">
+                        
+                        <div class="card-header bg-dark pt-3 border-bottom-0 d-flex justify-content-between align-items-start">
+                            <h6 class="card-title mb-0 pe-2 text-white">{{ anotacao.titulo }}</h6>
+                            
+                            <div class="d-flex gap-2 flex-shrink-0">
+                                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditar{{ anotacao.pk }}" title="Editar">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                
+                                <button type="button" class="btn btn-sm btn-danger   text-dark" data-bs-toggle="modal" data-bs-target="#modalExcluir{{ anotacao.pk }}" title="Apagar">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card-body d-flex flex-column">
+                            <p class="card-text">{{ anotacao.descricao }}</p>
+                            
+                            <div class="mt-auto">
+                                {% if anotacao.link %}
+                                <a href="{{ anotacao.link }}" target="_blank" class="btn btn-sm btn-success">
+                                    <i class="bi bi-folder-symlink-fill"></i> Material   
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-transparent text-muted small border-top-0 pb-3">
+                            {{ anotacao.data_criacao|date:"d/m/Y" }}
+                        </div>
+                        
+                    </div>
+                </div>
+                {% include 'includes/anotacoes/editar.html' %}
+                {% include 'includes/anotacoes/excluir.html' %}
+
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-dark">Nenhuma anotação encontrada.</div>
+    {% endif %}
+</div>
+
+{% include 'includes/anotacoes/criar.html' %}
+
+{% endblock %}
