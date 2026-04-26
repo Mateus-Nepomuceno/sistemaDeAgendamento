@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-11 col-md-10 col-lg-8">
+        {% if user.is_authenticated %}
+        <h1 class="display-4 text-center fw-bold lh-1">Seja bem-vindo <span class="text-capitalize">{{ user.username }}</span>!</h1>
+        {% else %}
+        <h1 class="display-4 text-center fw-bold lh-1">Sistema de<br>Agendamento</h1>
+        <p class="fs-5 text-center fw-semibold">do Núcleo de Apoio à Gestão de Pessoas</p>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% if user.is_authenticated %}
+
+{% else %}
+<div class="container p-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="carousel slide carousel-fade" data-bs-touch="false" data-bs-ride="carousel" id="ads">
+                <div class="carousel-indicators">
+                    <button class="active" data-bs-target="#ads" data-bs-slide-to="0"></button>
+                    <button class="" data-bs-target="#ads" data-bs-slide-to="1"></button>
+                    <button class="" data-bs-target="#ads" data-bs-slide-to="2"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="3000">
+                        <img src="{% static 'img/carrossel1.webp' %}" alt="" class="rounded-5 d-block w-100">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="1000">
+                        <img src="{% static 'img/carrossel2.webp' %}" alt="" class="rounded-5 d-block w-100">
+                    </div>
+                    <div class="carousel-item" data-bs-interval="2000">
+                        <img src="{% static 'img/carrossel3.webp' %}" alt="" class="rounded-5 d-block w-100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-8 col-sm-8 col-md-6 rounded-4 py-3 mt-4 bg-light shadow">
+            {% if user.is_authenticated %}
+            <p class="fs-6 text-center fw-semibold m-0">Acesse o menu para mais informações.</p>
+            {% else %}
+            <p class="fs-6 text-center fw-semibold m-0">Entre para ter acesso ao sistema.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock  %}
