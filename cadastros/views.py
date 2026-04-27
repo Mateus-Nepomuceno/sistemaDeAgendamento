@@ -5,7 +5,6 @@ from django.db.models import Q
 from django.http import HttpResponseNotAllowed, HttpResponseRedirect
 from .models import Funcionario
 
-<<<<<<< HEAD
 class TecnicoListView(LoginRequiredMixin, ListView):
     model = Funcionario
     template_name = 'cadastros/tecnicos.html' 
@@ -32,7 +31,7 @@ class TecnicoCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('cadastros:tecnicos')
 
     def form_valid(self, form):
-        form.instance.tipo = Funcionario.Tipo.TECNICO  # 🔥 chave principal
+        form.instance.tipo = Funcionario.Tipo.TECNICO
         return super().form_valid(form)
 
     def get(self, request, *args, **kwargs):
@@ -64,8 +63,6 @@ class TecnicoDeleteView(LoginRequiredMixin, DeleteView):
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
 
-=======
->>>>>>> 6609944defb6047076eb27d27cb72dd0fd6a4466
 class DocenteListView(LoginRequiredMixin, ListView):
     model = Funcionario
     template_name = 'cadastros/index.html'
