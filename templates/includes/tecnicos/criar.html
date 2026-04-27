@@ -8,7 +8,7 @@
             </div>
             
             <div class="modal-body p-4">
-                <form method="post" action="{% url 'cadastros:tecnico_create' %}">
+                <form method="post" action="{% url 'cadastros:tecnico_criar' %}">
                     {% csrf_token %}
                     
                     <div class="row">
@@ -35,6 +35,11 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Ano Avaliado</label>
                             <input type="date" name="ano_avaliado" class="form-control border-success" required>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Cargo</label>
+                            <input type="text" name="cargo" class="form-control border-success">
                         </div>
 
                         <div class="col-md-12 mb-3">

@@ -26,7 +26,7 @@ class TecnicoListView(LoginRequiredMixin, ListView):
 class TecnicoCreateView(LoginRequiredMixin, CreateView):
     model = Funcionario
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'nivel', 'email'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'cargo', 'observacoes', 'nivel', 'email'
     ]
     success_url = reverse_lazy('cadastros:tecnicos')
 
@@ -41,7 +41,7 @@ class TecnicoUpdateView(LoginRequiredMixin, UpdateView):
     model = Funcionario
     queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.TECNICO)
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'nivel', 'email', 'ativo', 'observacoes'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'cargo', 'nivel', 'email', 'ativo', 'observacoes'
     ]
     success_url = reverse_lazy('cadastros:tecnicos')
 
@@ -65,7 +65,7 @@ class TecnicoDeleteView(LoginRequiredMixin, DeleteView):
 
 class DocenteListView(LoginRequiredMixin, ListView):
     model = Funcionario
-    template_name = 'cadastros/index.html'
+    template_name = 'cadastros/docentes.html'
     context_object_name = 'docentes'
 
     def get_queryset(self):
@@ -86,7 +86,7 @@ class DocenteCreateView(LoginRequiredMixin, CreateView):
     fields = [
         'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'nivel', 'email'
     ]
-    success_url = reverse_lazy('cadastros:index')
+    success_url = reverse_lazy('cadastros:docentes')
 
     def form_valid(self, form):
         form.instance.tipo = Funcionario.Tipo.DOCENTE
@@ -101,7 +101,7 @@ class DocenteUpdateView(LoginRequiredMixin, UpdateView):
     fields = [
         'nome', 'processo', 'ano_avaliado', 'matricula', 'nivel', 'email', 'ativo', 'observacoes'
     ]
-    success_url= reverse_lazy('cadastros:index')
+    success_url= reverse_lazy('cadastros:docentes')
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
@@ -109,7 +109,7 @@ class DocenteUpdateView(LoginRequiredMixin, UpdateView):
 class DocenteDeleteView(LoginRequiredMixin, DeleteView):
     model = Funcionario
     queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
-    success_url = reverse_lazy('cadastros:index')
+    success_url = reverse_lazy('cadastros:docentes')
 
     def form_valid(self, form):
         success_url = self.get_success_url()

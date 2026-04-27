@@ -34,6 +34,7 @@
                         <th>Ano Avaliado</th>
                         <th>Servidor</th>
                         <th>Matrícula</th>
+                        <th>Cargo</th>
                         <th>Nível</th>
                         <th>Próx. Progressão</th>
                         <th>Status</th>
@@ -48,6 +49,7 @@
                             <td>{{ tecnico.ano_avaliado|date:"d/m/Y"|default:"-" }}</td>
                             <td class="fw-semibold">{{ tecnico.nome }}</td>
                             <td>{{ tecnico.matricula|default:"-" }}</td>
+                            <td>{{ tecnico.cargo|default:"-" }}</td>
                             <td>{{ tecnico.nivel|default:"-" }}</td>
                             <td>{{ tecnico.proxima_progressao|date:"d/m/Y"|default:"-" }}</td>
                             
