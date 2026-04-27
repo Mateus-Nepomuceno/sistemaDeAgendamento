@@ -1,0 +1,26 @@
+<div class="modal fade" id="modalExcluir{{ tecnico.pk }}" tabindex="-1" aria-labelledby="modalExcluirLabel{{ tecnico.pk }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"> 
+        <div class="modal-content shadow-lg border-danger rounded-4">
+            
+            <div class="modal-header bg-danger text-white rounded-top-4">
+                <h5 class="modal-title w-100 text-center" id="modalExcluirLabel{{ tecnico.pk }}">Confirmar Inativação</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            
+            <div class="modal-body p-4 text-center">
+                <p class="mb-1">Tem certeza que deseja inativar o técnico</p>
+                <h5 class="fw-bold">{{ tecnico.nome }}</h5>
+                <p class="text-muted small">O registro não será apagado do sistema, apenas marcado como <strong>Inativo</strong>.</p>
+                
+                <form method="post" action="{% url 'cadastros:tecnico_excluir' tecnico.pk %}" class="mt-4">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger fw-bold">Sim, Inativar</button>
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
