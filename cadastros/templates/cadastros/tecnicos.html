@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Técnicos {% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5 px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-5 fw-bold">Técnicos</h1>
+        
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNovoTecnico">
+            <i class="bi bi-plus-circle me-2"></i>Novo Técnico
+        </button>
+    </div>
+
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-9">
+            <input type="text" name="q" class="form-control border-dark" 
+                    placeholder="Buscar por nome, matrícula ou processo..." 
+                    value="{{ request.GET.q|default:'' }}">
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-dark w-100">
+                <i class="bi bi-search me-2"></i>Buscar
+            </button>
+        </div>
+    </form>
+
+    {% if tecnicos %}
+        <div class="table-responsive shadow rounded-3 bg-white">
+            <table class="table table-hover table-striped table-bordered align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Processo</th>
+                        <th>Ano Avaliado</th>
+                        <th>Servidor</th>
+                        <th>Matrícula</th>
+                        <th>Cargo</th>
+                        <th>Nível</th>
+                        <th>Próx. Progressão</th>
+                        <th>Status</th>
+                        <th>Observações</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tecnico in tecnicos %}
+                        <tr>
+                            <td>{{ tecnico.processo|default:"-" }}</td>
+                            <td>{{ tecnico.ano_avaliado|date:"d/m/Y"|default:"-" }}</td>
+                            <td class="fw-semibold">{{ tecnico.nome }}</td>
+                            <td>{{ tecnico.matricula|default:"-" }}</td>
+                            <td>{{ tecnico.cargo|default:"-" }}</td>
+                            <td>{{ tecnico.nivel|default:"-" }}</td>
+                            <td>{{ tecnico.proxima_progressao|date:"d/m/Y"|default:"-" }}</td>
+                            
+                            <td>
+                                {% if tecnico.ativo %}
+                                    <span class="badge bg-success mb-1 d-block">Ativo</span>
+                                {% else %}
+                                    <span class="badge bg-danger mb-1 d-block">Inativo</span>
+                                {% endif %}
+                            </td>
+
+                            <td style="max-width: 200px;" class="text-truncate" title="{{ tecnico.observacoes }}">
+                                {{ tecnico.observacoes|default:"" }}
+                            </td>
+
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditar{{ tecnico.pk }}">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    
+                                    <button type="button" class="btn btn-sm btn-danger text-dark" data-bs-toggle="modal" data-bs-target="#modalExcluir{{ tecnico.pk }}">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% include 'includes/tecnicos/editar.html' %}
+                        {% include 'includes/tecnicos/excluir.html' %}
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-dark">Nenhum técnico encontrado.</div>
+    {% endif %}
+</div>
+
+{% include 'includes/tecnicos/criar.html' %}
+
+{% endblock %}
