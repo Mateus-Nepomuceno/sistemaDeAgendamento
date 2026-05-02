@@ -15,7 +15,7 @@
     <form method="GET" class="row g-3 mb-4">
         <div class="col-md-9">
             <input type="text" name="q" class="form-control border-dark" 
-                    placeholder="Buscar por nome, matrícula ou processo..." 
+                    placeholder="Buscar por nome, matrícula, cargo ou processo..." 
                     value="{{ request.GET.q|default:'' }}">
         </div>
         <div class="col-md-3">
@@ -39,12 +39,13 @@
                         <th>Próx. Progressão</th>
                         <th>Status</th>
                         <th>Observações</th>
+                        <th class="text-center">Suap</th>
                         <th class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for tecnico in tecnicos %}
-                        <tr>
+                        <tr class="{% if tecnico.status == 'PE' %}table-danger{% elif tecnico.status == 'FI' %}table-success{% endif %}">
                             <td>{{ tecnico.processo|default:"-" }}</td>
                             <td>{{ tecnico.ano_avaliado|date:"d/m/Y"|default:"-" }}</td>
                             <td class="fw-semibold">{{ tecnico.nome }}</td>
@@ -53,16 +54,19 @@
                             <td>{{ tecnico.nivel|default:"-" }}</td>
                             <td>{{ tecnico.proxima_progressao|date:"d/m/Y"|default:"-" }}</td>
                             
-                            <td>
-                                {% if tecnico.ativo %}
-                                    <span class="badge bg-success mb-1 d-block">Ativo</span>
-                                {% else %}
-                                    <span class="badge bg-danger mb-1 d-block">Inativo</span>
-                                {% endif %}
-                            </td>
-
+                            <td>{{ tecnico.get_status_display   |default:"-" }}</td>
                             <td style="max-width: 200px;" class="text-truncate" title="{{ tecnico.observacoes }}">
                                 {{ tecnico.observacoes|default:"" }}
+                            </td>
+
+                            <td class="text-center">
+                                {% if tecnico.suap %}
+                                <div class="d-flex justify-content-center">
+                                    <a href="{{ tecnico.suap }}" target="_blank" class="btn btn-sm btn-success">
+                                        <i class="bi bi-folder-fill"></i>
+                                    </a>
+                                </div>
+                                {% endif %}
                             </td>
 
                             <td class="text-center">
