@@ -14,7 +14,22 @@
     </div>
 </div>
 {% if user.is_authenticated %}
-
+    <p class="fs-6 text-center fw-semibold mt-5">Lista de demandas recentes:</p>
+    {% if funcionarios %}
+    <div class="container mb-4">
+        <ul class="list-group rounded-4 overflow-hidden">
+            {% for funcionario in funcionarios %}
+            <li class="list-group-item py-3 d-flex justify-content-between align-items-center">
+                <span class="fw-medium">{{ funcionario.nome }}</span>
+                
+                <div class="bg-danger text-white rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 45px; height: 45px;">
+                    <span class="fs-6 fw-bold">{{ funcionario.proxima_progressao|date:"d" }}</span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 {% else %}
 <div class="container p-5">
     <div class="row justify-content-center">
