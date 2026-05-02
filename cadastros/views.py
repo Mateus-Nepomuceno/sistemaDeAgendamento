@@ -26,7 +26,7 @@ class TecnicoListView(LoginRequiredMixin, ListView):
 class TecnicoCreateView(LoginRequiredMixin, CreateView):
     model = Funcionario
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'cargo', 'observacoes', 'nivel', 'email'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'cargo', 'observacoes', 'nivel', 'email', 'status'
     ]
     success_url = reverse_lazy('cadastros:tecnicos')
 
@@ -41,7 +41,7 @@ class TecnicoUpdateView(LoginRequiredMixin, UpdateView):
     model = Funcionario
     queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.TECNICO)
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'cargo', 'nivel', 'email', 'ativo', 'observacoes'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'cargo', 'nivel', 'email', 'status', 'observacoes'
     ]
     success_url = reverse_lazy('cadastros:tecnicos')
 
@@ -76,15 +76,20 @@ class DocenteListView(LoginRequiredMixin, ListView):
             lista = lista.filter(
                 Q(nome__icontains= busca) |
                 Q(matricula__icontains= busca) |
-                Q(cargo__icontains= busca)
+                Q(processo__icontains= busca)
             )
 
         return lista
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = Funcionario.Status.choices
+        return context
 
 class DocenteCreateView(LoginRequiredMixin, CreateView):
     model = Funcionario
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'nivel', 'email'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'nivel', 'email', 'status', 'suap'
     ]
     success_url = reverse_lazy('cadastros:docentes')
 
@@ -99,7 +104,7 @@ class DocenteUpdateView(LoginRequiredMixin, UpdateView):
     model = Funcionario
     queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'nivel', 'email', 'ativo', 'observacoes'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'nivel', 'email', 'status', 'observacoes', 'suap'
     ]
     success_url= reverse_lazy('cadastros:docentes')
 
@@ -108,15 +113,10 @@ class DocenteUpdateView(LoginRequiredMixin, UpdateView):
 
 class DocenteDeleteView(LoginRequiredMixin, DeleteView):
     model = Funcionario
-    queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
     success_url = reverse_lazy('cadastros:docentes')
 
-    def form_valid(self, form):
-        success_url = self.get_success_url()
-        self.object = self.get_object()
-        self.object.ativo = False
-        self.object.save()
-        return HttpResponseRedirect(success_url)
+    def get_queryset(self):
+        return Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])

@@ -38,12 +38,13 @@
                         <th scope="col">Próx. Progressão</th>
                         <th scope="col">Status</th>
                         <th scope="col">Observações</th>
+                        <th scope="col" class="text-center">Suap</th>
                         <th scope="col" class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for docente in docentes %}
-                        <tr>
+                        <tr class="{% if docente.status == 'PE' %}table-danger{% elif docente.status == 'FI' %}table-success{% endif %}">
                             <td>{{ docente.processo|default:"-" }}</td>
                             <td>{{ docente.ano_avaliado|date:"d/m/Y"|default:"-" }}</td>
                             <td class="fw-semibold">{{ docente.nome }}</td>
@@ -51,16 +52,20 @@
                             <td>{{ docente.nivel|default:"-" }}</td>
                             <td>{{ docente.proxima_progressao|date:"d/m/Y"|default:"-" }}</td>
                             
-                            <td>
-                                {% if docente.ativo %}
-                                    <span class="badge bg-success mb-1 d-block">Ativo</span>
-                                {% else %}
-                                    <span class="badge bg-danger mb-1 d-block">Inativo</span>
-                                {% endif %}
-                            </td>
+                            <td>{{ docente.get_status_display   |default:"-" }}</td>
 
                             <td style="max-width: 200px;" class="text-truncate" title="{{ docente.observacoes }}">
                                 {{ docente.observacoes|default:"" }}
+                            </td>
+
+                            <td class="text-center">
+                                {% if docente.suap %}
+                                <div class="d-flex justify-content-center">
+                                    <a href="{{ docente.suap }}" target="_blank" class="btn btn-sm btn-success">
+                                        <i class="bi bi-folder-fill"></i>
+                                    </a>
+                                </div>
+                                {% endif %}
                             </td>
 
                             <td class="text-center">
