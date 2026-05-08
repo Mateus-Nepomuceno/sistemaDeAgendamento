@@ -1,9 +1,13 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.db.models import Q
-from django.http import HttpResponseNotAllowed, HttpResponseRedirect
+from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
+from django.shortcuts import redirect 
+from django.contrib import messages
 from .models import Funcionario
+from .utils import importar_csv_servidores 
 
 class TecnicoListView(LoginRequiredMixin, ListView):
     model = Funcionario
@@ -121,3 +125,29 @@ class DocenteDeleteView(LoginRequiredMixin, DeleteView):
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+    
+@login_required
+def upload_funcionarios_csv(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    tipo = request.POST.get('tipo_servidor')
+    
+    if tipo == 'DO':
+        fallback_url = 'cadastros:docentes'
+    elif tipo == 'TE':
+        fallback_url = 'cadastros:tecnicos'
+    else:
+        return HttpResponseBadRequest("Tipo de servidor inválido ou não informado.")
+
+    if request.FILES.get('arquivo_csv'):
+        arquivo = request.FILES['arquivo_csv']
+        try:
+            importar_csv_servidores(arquivo, tipo)
+            messages.success(request, 'Importação realizada com sucesso!')
+        except Exception as e:
+            messages.error(request, f'Erro ao processar arquivo: {e}')
+    else:
+        messages.error(request, 'Nenhum arquivo foi selecionado para importação.')
+
+    return redirect(request.META.get('HTTP_REFERER', fallback_url))
