@@ -10,21 +10,27 @@
             <div class="modal-body p-4">
                 <form method="post" action="{% url 'anotacoes:anotacao_criar' %}">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Título</label>
-                        <input type="text" name="titulo" class="form-control border-dark" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Descrição</label>
-                        <textarea name="descricao" class="form-control border-dark" rows="5" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Link (opcional)</label>
-                        <input type="url" name="link" class="form-control border-dark">
-                    </div>
-                    <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-success fw-bold">Salvar Anotação</button>
-                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Título<span class="text-danger">*</span></label>
+                            <input type="text" name="titulo" class="form-control border-dark" required>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Descrição<span class="text-danger">*</span></label>
+                            <textarea name="descricao" class="form-control border-dark" rows="5" required></textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Link</label>
+                            <input type="url" name="link" class="form-control border-dark">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Prazo</label>
+                            <input type="date" name="prazo" class="form-control border-dark" required>
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success fw-bold">Salvar Anotação</button>
+                            <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>

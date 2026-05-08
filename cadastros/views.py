@@ -1,9 +1,13 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.db.models import Q
-from django.http import HttpResponseNotAllowed, HttpResponseRedirect
+from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
+from django.shortcuts import redirect 
+from django.contrib import messages
 from .models import Funcionario
+from .utils import importar_csv_servidores 
 
 class TecnicoListView(LoginRequiredMixin, ListView):
     model = Funcionario
@@ -18,15 +22,21 @@ class TecnicoListView(LoginRequiredMixin, ListView):
             lista = lista.filter(
                 Q(nome__icontains=busca) |
                 Q(matricula__icontains=busca) |
-                Q(cargo__icontains=busca)
+                Q(cargo__icontains=busca) |
+                Q(processo__icontains=busca) 
             )
 
         return lista
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = Funcionario.Status.choices
+        return context
+    
 class TecnicoCreateView(LoginRequiredMixin, CreateView):
     model = Funcionario
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'cargo', 'observacoes', 'nivel', 'email'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'cargo', 'observacoes', 'nivel', 'email', 'status', 'suap'
     ]
     success_url = reverse_lazy('cadastros:tecnicos')
 
@@ -41,7 +51,7 @@ class TecnicoUpdateView(LoginRequiredMixin, UpdateView):
     model = Funcionario
     queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.TECNICO)
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'cargo', 'nivel', 'email', 'ativo', 'observacoes'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'cargo', 'nivel', 'email', 'status', 'observacoes', 'suap'
     ]
     success_url = reverse_lazy('cadastros:tecnicos')
 
@@ -50,15 +60,10 @@ class TecnicoUpdateView(LoginRequiredMixin, UpdateView):
 
 class TecnicoDeleteView(LoginRequiredMixin, DeleteView):
     model = Funcionario
-    queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.TECNICO)
     success_url = reverse_lazy('cadastros:tecnicos')
 
-    def form_valid(self, form):
-        success_url = self.get_success_url()
-        self.object = self.get_object()
-        self.object.ativo = False
-        self.object.save()
-        return HttpResponseRedirect(success_url)
+    def get_queryset(self):
+        return Funcionario.objects.filter(tipo=Funcionario.Tipo.TECNICO)
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
@@ -76,15 +81,20 @@ class DocenteListView(LoginRequiredMixin, ListView):
             lista = lista.filter(
                 Q(nome__icontains= busca) |
                 Q(matricula__icontains= busca) |
-                Q(cargo__icontains= busca)
+                Q(processo__icontains= busca)
             )
 
         return lista
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = Funcionario.Status.choices
+        return context
 
 class DocenteCreateView(LoginRequiredMixin, CreateView):
     model = Funcionario
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'nivel', 'email'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'observacoes', 'nivel', 'email', 'status', 'suap'
     ]
     success_url = reverse_lazy('cadastros:docentes')
 
@@ -99,7 +109,7 @@ class DocenteUpdateView(LoginRequiredMixin, UpdateView):
     model = Funcionario
     queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
     fields = [
-        'nome', 'processo', 'ano_avaliado', 'matricula', 'nivel', 'email', 'ativo', 'observacoes'
+        'nome', 'processo', 'ano_avaliado', 'matricula', 'nivel', 'email', 'status', 'observacoes', 'suap'
     ]
     success_url= reverse_lazy('cadastros:docentes')
 
@@ -108,15 +118,36 @@ class DocenteUpdateView(LoginRequiredMixin, UpdateView):
 
 class DocenteDeleteView(LoginRequiredMixin, DeleteView):
     model = Funcionario
-    queryset = Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
     success_url = reverse_lazy('cadastros:docentes')
 
-    def form_valid(self, form):
-        success_url = self.get_success_url()
-        self.object = self.get_object()
-        self.object.ativo = False
-        self.object.save()
-        return HttpResponseRedirect(success_url)
+    def get_queryset(self):
+        return Funcionario.objects.filter(tipo=Funcionario.Tipo.DOCENTE)
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+    
+@login_required
+def upload_funcionarios_csv(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    tipo = request.POST.get('tipo_servidor')
+    
+    if tipo == 'DO':
+        fallback_url = 'cadastros:docentes'
+    elif tipo == 'TE':
+        fallback_url = 'cadastros:tecnicos'
+    else:
+        return HttpResponseBadRequest("Tipo de servidor inválido ou não informado.")
+
+    if request.FILES.get('arquivo_csv'):
+        arquivo = request.FILES['arquivo_csv']
+        try:
+            importar_csv_servidores(arquivo, tipo)
+            messages.success(request, 'Importação realizada com sucesso!')
+        except Exception as e:
+            messages.error(request, f'Erro ao processar arquivo: {e}')
+    else:
+        messages.error(request, 'Nenhum arquivo foi selecionado para importação.')
+
+    return redirect(request.META.get('HTTP_REFERER', fallback_url))

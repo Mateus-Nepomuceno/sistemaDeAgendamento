@@ -84,11 +84,12 @@ if not DEBUG:
         }
     }
     default_db_url = os.environ.get('DJANGO_DB_URL', f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
+    is_sqlite = default_db_url.startswith('sqlite')
     DATABASES = {
         'default': dj_database_url.config(
             default=default_db_url,
             conn_max_age=600,
-            ssl_require=True
+            ssl_require=not is_sqlite
         )
     }
     SECURE_SSL_REDIRECT = True

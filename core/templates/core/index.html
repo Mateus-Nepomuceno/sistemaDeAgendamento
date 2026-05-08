@@ -14,7 +14,54 @@
     </div>
 </div>
 {% if user.is_authenticated %}
-
+<div class="container my-4">
+    <div class="row g-4 mt-3 justify-content-center">
+        
+        <div class="col-md-5 col-lg-5 col-xl-6">
+            <div class="p-4 rounded-4 shadow-sm bg-white h-100 d-flex flex-column">
+                <h4 class="text-center fw-bold mb-4">Demandas Recentes</h4>
+                
+                <ul class="list-group list-group-flush flex-grow-1">
+                    {% if funcionarios %}
+                        {% for funcionario in funcionarios %}
+                        <li class="list-group-item py-2 d-flex justify-content-between align-items-center bg-transparent px-0">
+                            <span class="fw-medium">{{ funcionario.nome }} - {{ funcionario.get_tipo_display }}</span>
+                            
+                            <div class="bg-danger text-white rounded-circle d-flex justify-content-center align-items-center flex-shrink-0 border border-dark" style="width: 45px; height: 45px;">
+                                <span class="fs-6 fw-bold">{{ funcionario.proxima_progressao|date:"d" }}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item py-2 text-muted text-center bg-transparent">Nenhuma progressão próxima.</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="col-md-7 col-lg-5 col-xl-4">
+            <div class="p-4 rounded-4 shadow-sm bg-white h-100 d-flex flex-column">
+                <h4 class="text-center fw-bold mb-4">Calendário</h4>
+                
+                <div class="d-grid gap-2 justify-content-center flex-grow-1 align-content-start" style="grid-template-columns: repeat(7, auto);">
+                    {% for dia in dias_calendario %}
+                        {% if dia in dias_destaque %}
+                            <div class="bg-danger text-white rounded-circle d-flex justify-content-center align-items-center mx-auto border border-dark" 
+                                style="width: 40px; height: 40px;">
+                                <span class="fs-6 fw-bold">{{ dia|stringformat:"02d" }}</span>
+                            </div>
+                        {% else %}
+                            <div class="bg-white text-dark rounded-circle d-flex justify-content-center align-items-center mx-auto border border-dark" 
+                                style="width: 40px; height: 40px;">
+                                <span class="fs-6 fw-bold">{{ dia|stringformat:"02d" }}</span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% else %}
 <div class="container p-5">
     <div class="row justify-content-center">
@@ -52,5 +99,4 @@
         </div>
     </div>
 </div>
-
 {% endblock  %}

@@ -13,38 +13,53 @@
                     
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label class="form-label fw-bold">Nome</label>
-                            <input type="text" name="nome" class="form-control border-success" required>
+                            <label class="form-label fw-bold">Nome<span class="text-danger">*</span></label>
+                            <input type="text" name="nome" class="form-control border-dark" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Matrícula</label>
-                            <input type="text" name="matricula" class="form-control border-success" required>
+                            <label class="form-label fw-bold">Matrícula<span class="text-danger">*</span></label>
+                            <input type="text" name="matricula" class="form-control border-dark" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Processo</label>
-                            <input type="text" name="processo" class="form-control border-success" required>
+                            <label class="form-label fw-bold">Processo<span class="text-danger">*</span></label>
+                            <input type="text" name="processo" class="form-control border-dark" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Nível</label>
-                            <input type="text" name="nivel" class="form-control border-success" required>
+                            <label class="form-label fw-bold">Nível<span class="text-danger">*</span></label>
+                            <input type="text" name="nivel" class="form-control border-dark" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Ano Avaliado</label>
-                            <input type="date" name="ano_avaliado" class="form-control border-success" required>
+                            <label class="form-label fw-bold">Ano Avaliado<span class="text-danger">*</span></label>
+                            <input type="date" name="ano_avaliado" class="form-control border-dark" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" name="email" class="form-control border-dark">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Status<span class="text-danger">*</span></label>
+                            <select name="status" class="form-select border-dark" required>
+                                <option value="" disabled selected hidden>Selecione...</option>
+                                {% for code, label in status_choices %}
+                                    <option value="{{ code }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
 
                         <div class="col-md-12 mb-3">
-                            <label class="form-label fw-bold">Email</label>
-                            <input type="email" name="email" class="form-control border-success">
+                            <label class="form-label fw-bold">Suap</label>
+                            <input type="url" name="suap" class="form-control border-dark">
                         </div>
 
                         <div class="col-md-12 mb-3">
                             <label class="form-label fw-bold">Observações</label>
-                            <textarea name="observacoes" class="form-control border-success" rows="3"></textarea>
+                            <textarea name="observacoes" class="form-control border-dark" rows="3"></textarea>
                         </div>
                     </div>
                     

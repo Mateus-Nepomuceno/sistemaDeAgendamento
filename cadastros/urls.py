@@ -8,8 +8,11 @@ urlpatterns= [
     path('docentes/criar/', views.DocenteCreateView.as_view(), name='docente_criar'),
     path('docentes/editar/<int:pk>/', views.DocenteUpdateView.as_view(), name='docente_editar'),
     path('docentes/excluir/<int:pk>/', views.DocenteDeleteView.as_view(), name='docente_excluir'),
+
     path('tecnicos/', views.TecnicoListView.as_view(), name='tecnicos'),
     path('tecnicos/novo/', views.TecnicoCreateView.as_view(), name='tecnico_criar'),
     path('tecnicos/<int:pk>/editar/', views.TecnicoUpdateView.as_view(), name='tecnico_editar'),
     path('tecnicos/<int:pk>/delete/', views.TecnicoDeleteView.as_view(), name='tecnico_excluir'),
+    
+    path('importar-csv/', views.upload_funcionarios_csv, name='importar_csv'),
 ]

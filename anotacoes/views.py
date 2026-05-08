@@ -34,7 +34,7 @@ class AnotacaoListView(LoginRequiredMixin, ListView):
 
 class AnotacaoCreateView(LoginRequiredMixin, CreateView):
     model = Anotacao
-    fields = ['titulo', 'descricao', 'link']
+    fields = ['titulo', 'descricao', 'link', 'prazo']
     success_url = reverse_lazy('anotacoes:index')
 
     def form_valid(self, form):
@@ -46,7 +46,7 @@ class AnotacaoCreateView(LoginRequiredMixin, CreateView):
     
 class AnotacaoUpdateView(LoginRequiredMixin, UpdateView):
     model = Anotacao
-    fields = ['titulo', 'descricao', 'link']
+    fields = ['titulo', 'descricao', 'link', 'prazo']
     success_url = reverse_lazy('anotacoes:index')
 
     def get_queryset(self):

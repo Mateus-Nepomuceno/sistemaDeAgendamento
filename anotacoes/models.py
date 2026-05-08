@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Anotacao(models.Model):
@@ -8,8 +9,15 @@ class Anotacao(models.Model):
     link = models.URLField(blank=True, null=True, verbose_name='Link')
     
     data_criacao = models.DateField(auto_now_add=True, verbose_name='Data de Criação')
+    prazo = models.DateField(null=True, blank=True, verbose_name='Prazo')
     
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='anotacoes')
+
+    @property
+    def esta_atrasado(self):
+        if not self.prazo:
+            return False
+        return self.prazo < timezone.now().date()
     
     class Meta:
         verbose_name = 'Anotação'

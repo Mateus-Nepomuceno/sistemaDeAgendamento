@@ -43,11 +43,20 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Status Ativo</label>
-                            <select name="ativo" class="form-select border-dark">
-                                <option value="True" {% if docente.ativo %}selected{% endif %}>Sim</option>
-                                <option value="False" {% if not docente.ativo %}selected{% endif %}>Não</option>
+                            <label class="form-label fw-bold">Status<span class="text-danger">*</span></label>
+                            <select name="status" class="form-select border-dark" required>
+                                <option value="" disabled hidden>Selecione...</option>
+                                {% for code, label in status_choices %}
+                                    <option value="{{ code }}" {% if docente.status == code %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
                             </select>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Suap</label>
+                            <input type="url" name="suap" class="form-control border-dark" value="{{ docente.suap|default_if_none:'' }}">
                         </div>
 
                         <div class="col-md-12 mb-3">
