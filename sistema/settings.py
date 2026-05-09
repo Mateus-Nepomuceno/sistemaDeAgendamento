@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'anotacoes',
     'cadastros',
     'core',
+    'prazos',
 ]
 
 MIDDLEWARE = [
