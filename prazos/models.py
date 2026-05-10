@@ -10,7 +10,7 @@ class Probatorio(models.Model):
     nome = models.CharField(max_length=100, verbose_name='Nome')
     matricula = models.CharField(max_length=50,)
     data_inicio = models.DateField(blank=True)
-    data_encerramento = models.DateField(blank=True)
+    data_encerramento = models.DateField(blank=True, null=True)
     avaliacao_1 = models.CharField(
         max_length=2,
         choices=Status.choices,
@@ -39,8 +39,8 @@ class Probatorio(models.Model):
         super().save(*args, **kwargs)
     
     class Meta:
-        verbose_name = 'Probatório'
-        verbose_name_plural = 'Probatórios'
+        verbose_name = 'Estágio Probatório'
+        verbose_name_plural = 'Estágios Probatórios'
         ordering = ['nome']
 
     def __str__(self):

@@ -8,7 +8,7 @@ from .models import Probatorio
 class ProbatorioListView(LoginRequiredMixin, ListView):
     model = Probatorio
     template_name = 'prazos/probatorio.html' 
-    context_object_name = 'probatorio'
+    context_object_name = 'probatorios'
 
     def get_queryset(self):
         lista = Probatorio.objects.all()

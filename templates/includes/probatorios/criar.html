@@ -1,0 +1,77 @@
+<div class="modal fade" id="modalNovoProbatorio" tabindex="-1" aria-labelledby="modalNovoProbatorioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg"> 
+        <div class="modal-content shadow-lg border-dark rounded-4">
+            
+            <div class="modal-header bg-dark text-white rounded-top-4">
+                <h5 class="modal-title w-100 text-center" id="modalNovoProbatorioLabel">Cadastrar Novo Estágio</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            
+            <div class="modal-body p-4">
+                <form method="post" action="{% url 'prazos:probatorio_criar' %}">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Nome<span class="text-danger">*</span></label>
+                            <input type="text" name="nome" class="form-control border-dark" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Matrícula<span class="text-danger">*</span></label>
+                            <input type="text" name="matricula" class="form-control border-dark" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Data de Início<span class="text-danger">*</span></label>
+                            <input type="date" name="data_inicio" class="form-control border-dark" required>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Avaliação 1<span class="text-danger">*</span></label>
+                            <select name="avaliacao_1" class="form-select border-dark" required>
+                                {% for code, label in status_choices %}
+                                    <option value="{{ code }}" {% if code == 'EA' %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Avaliação 2<span class="text-danger">*</span></label>
+                            <select name="avaliacao_2" class="form-select border-dark" required>
+                                {% for code, label in status_choices %}
+                                    <option value="{{ code }}" {% if code == 'EA' %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Avaliação 3<span class="text-danger">*</span></label>
+                            <select name="avaliacao_3" class="form-select border-dark" required>
+                                {% for code, label in status_choices %}
+                                    <option value="{{ code }}" {% if code == 'EA' %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">SUAP</label>
+                            <input type="url" name="suap" class="form-control border-dark">
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Comentários</label>
+                            <textarea name="comentarios" class="form-control border-dark" rows="3"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-success fw-bold">Cadastrar Estágio</button>
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
