@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'cadastros',
     'core',
     'prazos',
+    'notificacoes',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +48,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'notificacoes.context_processors.notificacoes_context',
             ],
         },
     },
