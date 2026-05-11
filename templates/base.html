@@ -50,11 +50,21 @@
             {% endif %}
             
             <div id="menu">
-                <div class="navbar-nav ms-auto gap-2">   
+                <div class="navbar-nav ms-auto gap-3 align-items-center flex-row">   
                     {% if user.is_authenticated %}
+                        <button type="button" class="btn btn-outline-dark position-relative" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotificacoes" aria-controls="offcanvasNotificacoes">
+                            <i class="bi bi-bell fs-5"></i>
+                            {% if notificacoes_count > 0 %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ notificacoes_count }}
+                                <span class="visually-hidden">notificações não lidas</span>
+                            </span>
+                            {% endif %}
+                        </button>
+
                         <form action="{% url 'logout' %}" method="post" class="m-0 p-0">
                             {% csrf_token %}                
-                            <button type="submit" class="btn btn-outline-dark py-2 w-100">Sair</button>
+                            <button type="submit" class="btn btn-outline-dark py-2">Sair</button>
                         </form>
                     {% else %}
                         {% if request.resolver_match.url_name != 'login' %}
@@ -91,7 +101,40 @@
                     <i class="bi bi-person-badge me-3 fs-4 text-muted"></i>
                     <span class="fw-semibold">Técnicos</span>
                 </a>
+                <a href="{% url 'prazos:probatorio' %}" class="list-group-item list-group-item-action py-3 px-4 border-0 d-flex align-items-center">
+                    <i class="bi bi-clipboard-data me-3 fs-4 text-muted"></i>
+                    <span class="fw-semibold">Estágio Probatório</span>
+                </a>
             </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end" id="offcanvasNotificacoes" tabindex="-1" aria-labelledby="offcanvasNotificacoesLabel">
+        <div class="offcanvas-header">
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            {% if notificacoes_lista %}
+                <div class="list-group list-group-flush">
+                    {% for n in notificacoes_lista %}
+                        <a href="{% url 'notificacoes:marcar_lida' n.pk %}" class="list-group-item list-group-item-action py-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1 fw-bold text-dark">{{ n.titulo }}</h6>
+                                <small class="text-muted">{{ n.data_criacao|timesince }}</small>
+                            </div>
+                            <p class="mb-1 small text-muted">{{ n.mensagem }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="p-3 border-top">
+                    <a href="{% url 'notificacoes:limpar' %}" class="btn btn-outline-secondary btn-sm w-100">Marcar todas como lidas</a>
+                </div>
+            {% else %}
+                <div class="p-4 text-center">
+                    <i class="bi bi-bell-slash fs-1 text-muted"></i>
+                    <p class="mt-2 text-muted">Nenhuma notificação nova.</p>
+                </div>
+            {% endif %}
         </div>
     </div>
     {% endif %}

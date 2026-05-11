@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Estágio Probatório {% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5 px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-5 fw-bold">Estágio Probatório</h1>
+        
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNovoProbatorio">
+                <i class="bi bi-plus-circle me-2"></i>Novo Estágio Probatório
+            </button>
+        </div>
+    </div>
+
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-9">
+            <input type="text" name="q" class="form-control border-dark" 
+                    placeholder="Buscar por nome ou matrícula..." 
+                    value="{{ request.GET.q|default:'' }}">
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-dark w-100">
+                <i class="bi bi-search me-2"></i>Buscar
+            </button>
+        </div>
+    </form>
+
+    {% if probatorios %}
+        <div class="table-responsive shadow rounded-3 bg-white">
+            <table class="table table-hover table-striped table-bordered align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Matrícula</th>
+                        <th scope="col">Data Início</th>
+                        <th scope="col">Data Encerramento</th>
+                        <th scope="col" class="text-center">Avaliação 1</th>
+                        <th scope="col" class="text-center">Avaliação 2</th>
+                        <th scope="col" class="text-center">Avaliação 3</th>
+                        <th scope="col">Comentários</th>
+                        <th scope="col" class="text-center">Suap</th>
+                        <th scope="col" class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for probatorio in probatorios %}
+                        <tr class="{% if probatorio.avaliacao_1 == 'PE' or probatorio.avaliacao_2 == 'PE' or probatorio.avaliacao_3 == 'PE' %}table-danger{% elif probatorio.avaliacao_1 == 'FI' and probatorio.avaliacao_2 == 'FI' and probatorio.avaliacao_3 == 'FI' %}table-success{% endif %}">
+                            <td class="fw-semibold">{{ probatorio.nome }}</td>
+                            <td>{{ probatorio.matricula|default:"-" }}</td>
+                            <td>{{ probatorio.data_inicio|date:"d/m/Y"|default:"-" }}</td>
+                            <td>{{ probatorio.data_encerramento|date:"d/m/Y"|default:"-" }}</td>
+                            
+                            <td class="text-center">
+                                {{ probatorio.get_avaliacao_1_display }}
+                            </td>
+                            
+                            <td class="text-center">
+                                {{ probatorio.get_avaliacao_2_display }}
+                            </td>
+                            
+                            <td class="text-center">
+                                {{ probatorio.get_avaliacao_3_display }}
+                            </td>
+
+                            <td style="max-width: 200px;" class="text-truncate" title="{{ probatorio.comentarios }}">
+                                {{ probatorio.comentarios|default:"" }}
+                            </td>
+
+                            <td class="text-center">
+                                {% if probatorio.suap %}
+                                <div class="d-flex justify-content-center">
+                                    <a href="{{ probatorio.suap }}" target="_blank" class="btn btn-sm btn-success">
+                                        <i class="bi bi-folder-fill"></i>
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditar{{ probatorio.pk }}" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    
+                                    <button type="button" class="btn btn-sm btn-danger text-dark" data-bs-toggle="modal" data-bs-target="#modalExcluir{{ probatorio.pk }}" title="Apagar">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        {% include 'includes/probatorios/editar.html' %}
+                        {% include 'includes/probatorios/excluir.html' %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-light border shadow-sm">Nenhum estágio probatório encontrado.</div>
+    {% endif %}
+</div>
+
+{% include 'includes/probatorios/criar.html' %}
+{% endblock %}
