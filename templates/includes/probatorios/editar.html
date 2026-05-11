@@ -12,12 +12,12 @@
                     {% csrf_token %}
                     
                     <div class="row">
-                        <div class="col-md-8 mb-3">
+                        <div class="col-md-12 mb-3">
                             <label class="form-label fw-bold">Nome</label>
                             <input type="text" name="nome" class="form-control border-dark" value="{{ probatorio.nome }}" maxlength="100" required>
                         </div>
 
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Matrícula</label>
                             <input type="text" name="matricula" class="form-control border-dark" value="{{ probatorio.matricula }}" maxlength="50" required>
                         </div>
@@ -25,11 +25,6 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Data de Início</label>
                             <input type="date" name="data_inicio" class="form-control border-dark" value="{{ probatorio.data_inicio|date:'Y-m-d' }}">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Data de Encerramento</label>
-                            <input type="date" name="data_encerramento" class="form-control border-dark bg-light" value="{{ probatorio.data_encerramento|date:'Y-m-d' }}" readonly title="Calculado automaticamente após salvar">
                         </div>
 
                         <div class="col-md-4 mb-3">
