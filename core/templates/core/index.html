@@ -19,21 +19,24 @@
         
         <div class="col-md-5 col-lg-5 col-xl-6">
             <div class="p-4 rounded-4 shadow-sm bg-white h-100 d-flex flex-column">
-                <h4 class="text-center fw-bold mb-4">Demandas Recentes</h4>
+                <h4 class="text-center fw-bold mb-4">Prazos do Mês</h4>
                 
                 <ul class="list-group list-group-flush flex-grow-1">
-                    {% if funcionarios %}
-                        {% for funcionario in funcionarios %}
+                    {% if demandas %}
+                        {% for demanda in demandas %}
                         <li class="list-group-item py-2 d-flex justify-content-between align-items-center bg-transparent px-0">
-                            <span class="fw-medium">{{ funcionario.nome }} - {{ funcionario.get_tipo_display }}</span>
+                            <div>
+                                <span class="fw-medium d-block">{{ demanda.nome }}</span>
+                                <small class="text-muted">{{ demanda.tipo_demanda }}</small>
+                            </div>
                             
                             <div class="bg-danger text-white rounded-circle d-flex justify-content-center align-items-center flex-shrink-0 border border-dark" style="width: 45px; height: 45px;">
-                                <span class="fs-6 fw-bold">{{ funcionario.proxima_progressao|date:"d" }}</span>
+                                <span class="fs-6 fw-bold">{{ demanda.data_exibicao|date:"d" }}</span>
                             </div>
                         </li>
                         {% endfor %}
                     {% else %}
-                        <li class="list-group-item py-2 text-muted text-center bg-transparent">Nenhuma progressão próxima.</li>
+                        <li class="list-group-item py-2 text-muted text-center bg-transparent">Nenhum prazo para este mês.</li>
                     {% endif %}
                 </ul>
             </div>
