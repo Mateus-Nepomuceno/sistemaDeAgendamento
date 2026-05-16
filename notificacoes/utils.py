@@ -5,7 +5,26 @@ from cadastros.models import Funcionario
 from anotacoes.models import Anotacao
 from django.urls import reverse
 
+def atualizar_status():
+    hoje = date.today()
+    
+    Funcionario.objects.filter(
+        proxima_progressao__lt=hoje,
+        status='EA'
+    ).update(status='PE')
+    
+    Contrato.objects.filter(
+        data_encerramento__lt=hoje,
+        status='EA'
+    ).update(status='PE')
+    
+    Probatorio.objects.filter(
+        data_encerramento__lt=hoje,
+        avaliacao_3='EA'
+    ).update(avaliacao_3='PE')
+
 def gerar_notificacoes():
+    atualizar_status()
     hoje = date.today()
     dias_milestones = [0, 7, 15, 30]
     datas_milestones = [hoje + timedelta(days=d) for d in dias_milestones]
