@@ -8,6 +8,23 @@
         <h1 class="display-5 fw-bold">Professor Substituto</h1>
         
         <div class="d-flex gap-2">
+            <form action="{% url 'prazos:importar_csv' %}" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
+                {% csrf_token %}
+                <input type="hidden" name="tipo_importacao" value="SU">
+            
+                <div class="input-group shadow-sm">
+                    <input type="file" name="arquivo_csv" id="csvContrato" accept=".csv" class="d-none" required>
+                
+                    <label for="csvContrato" id="labelCsvContrato" class="btn btn-outline-dark text-truncate mb-0" style="border-top-left-radius: 8px; border-bottom-left-radius: 8px; max-width: 250px; cursor: pointer;">
+                        <i class="bi bi-upload me-2"></i>Escolher arquivo
+                    </label>
+                
+                    <button type="submit" class="btn btn-success">
+                        Importar
+                    </button>
+                </div>
+            </form>
+
             <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNovoSubstituto">
                 <i class="bi bi-plus-circle me-2"></i>Novo Professor Substituto
             </button>
@@ -95,4 +112,5 @@
 </div>
 
 {% include 'includes/substitutos/criar.html' %}
+<script src="{% static 'js/upload.js' %}"></script>
 {% endblock %}

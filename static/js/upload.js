@@ -17,4 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     configurarBotaoUpload('csvTecnicos', 'labelCsvTecnicos');
     configurarBotaoUpload('csvDocentes', 'labelCsvDocentes');
+    configurarBotaoUpload('csvProbatorio', 'labelCsvProbatorio');
+    configurarBotaoUpload('csvContrato', 'labelCsvContrato');
 });
