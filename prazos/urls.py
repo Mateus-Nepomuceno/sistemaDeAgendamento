@@ -12,4 +12,5 @@ urlpatterns= [
     path('professor-substituto/criar/', views.SubstitutoCreateView.as_view(), name='professor_substituto_criar'),
     path('professor-substituto/editar/<int:pk>/', views.SubstitutoUpdateView.as_view(), name='professor_substituto_editar'),
     path('professor-substituto/excluir/<int:pk>/', views.SubstitutoDeleteView.as_view(), name='professor_substituto_excluir'),
+    path('importar-csv/', views.upload_prazos_csv, name='importar_csv'),
 ]
