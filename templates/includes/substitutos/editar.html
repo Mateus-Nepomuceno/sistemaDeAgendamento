@@ -1,0 +1,69 @@
+<div class="modal fade" id="modalEditar{{ substituto.pk }}" tabindex="-1" aria-labelledby="modalEditarLabel{{ substituto.pk }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg"> 
+        <div class="modal-content shadow-lg border-dark rounded-4">
+            
+            <div class="modal-header bg-dark text-white rounded-top-4">
+                <h5 class="modal-title w-100 text-center" id="modalEditarLabel{{ substituto.pk }}">Editar Contrato Substituto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            
+            <div class="modal-body p-4">
+                <form method="post" action="{% url 'prazos:professor_substituto_editar' substituto.pk %}">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Nome</label>
+                            <input type="text" name="nome" class="form-control border-dark" value="{{ substituto.nome }}" maxlength="100" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Matrícula</label>
+                            <input type="text" name="matricula" class="form-control border-dark" value="{{ substituto.matricula }}" maxlength="50" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Vaga</label>
+                            <input type="text" name="vaga" class="form-control border-dark" value="{{ substituto.vaga }}" maxlength="100" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Data de Início</label>
+                            <input type="date" name="data_inicio" class="form-control border-dark" value="{{ substituto.data_inicio|date:'Y-m-d' }}" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Prazo</label>
+                            <input type="date" name="prazo" class="form-control border-dark" value="{{ substituto.prazo|date:'Y-m-d' }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Status<span class="text-danger">*</span></label>
+                            <select name="status" class="form-select border-dark" required>
+                                {% for code, label in status_choices %}
+                                    <option value="{{ code }}" {% if substituto.status == code %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Suap</label>
+                            <input type="url" name="suap" class="form-control border-dark" value="{{ substituto.suap|default_if_none:'' }}">
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Comentário</label>
+                            <textarea name="comentario" class="form-control border-dark" rows="3">{{ substituto.comentario|default_if_none:'' }}</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-warning fw-bold text-dark">Salvar Alterações</button>
+                        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>

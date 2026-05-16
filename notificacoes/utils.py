@@ -1,11 +1,30 @@
 from datetime import date, timedelta
 from .models import Notificacao
-from prazos.models import Probatorio
+from prazos.models import Probatorio, Contrato
 from cadastros.models import Funcionario
 from anotacoes.models import Anotacao
 from django.urls import reverse
 
+def atualizar_status():
+    hoje = date.today()
+    
+    Funcionario.objects.filter(
+        proxima_progressao__lt=hoje,
+        status='EA'
+    ).update(status='PE')
+    
+    Contrato.objects.filter(
+        data_encerramento__lt=hoje,
+        status='EA'
+    ).update(status='PE')
+    
+    Probatorio.objects.filter(
+        data_encerramento__lt=hoje,
+        avaliacao_3='EA'
+    ).update(avaliacao_3='PE')
+
 def gerar_notificacoes():
+    atualizar_status()
     hoje = date.today()
     dias_milestones = [0, 7, 15, 30]
     datas_milestones = [hoje + timedelta(days=d) for d in dias_milestones]
@@ -80,5 +99,29 @@ def gerar_notificacoes():
             mensagem=mensagem,
             url=url,
             usuario=a.usuario,
+            defaults={'lida': False}
+        )
+
+    contratos = Contrato.objects.filter(
+        data_encerramento__in=datas_milestones
+    ).exclude(status='FI') | Contrato.objects.filter(
+        data_encerramento__lt=hoje
+    ).exclude(status='FI')
+
+    for c in contratos:
+        atrasado = c.data_encerramento < hoje
+        dias_restantes = (c.data_encerramento - hoje).days
+        
+        prefixo = "ATRASADO: " if atrasado else f"LEMBRETE ({dias_restantes} dias): "
+        if dias_restantes == 0: prefixo = "HOJE: "
+
+        titulo = f"{prefixo}Prazo Contrato - {c.nome}"
+        mensagem = f"O contrato ({c.get_tipo_display()}) de {c.nome} {'encerrou' if atrasado else 'encerra'} em {c.data_encerramento.strftime('%d/%m/%Y')}."
+        url = reverse('prazos:professor_substituto')
+        
+        Notificacao.objects.get_or_create(
+            titulo=titulo,
+            mensagem=mensagem,
+            url=url,
             defaults={'lida': False}
         )

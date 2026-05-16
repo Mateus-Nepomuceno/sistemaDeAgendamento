@@ -1,7 +1,7 @@
 import calendar
 from django.views.generic import TemplateView
 from cadastros.models import Funcionario
-from prazos.models import Probatorio
+from prazos.models import Probatorio, Contrato
 from anotacoes.models import Anotacao
 from django.utils import timezone
 from itertools import chain
@@ -41,8 +41,15 @@ class IndexView(TemplateView):
                 a.tipo_demanda = "Anotação"
                 a.nome = a.titulo
 
+            contratos = Contrato.objects.filter(
+                data_encerramento__lte=fim_mes
+            ).exclude(status='FI')
+            for c in contratos:
+                c.data_exibicao = c.data_encerramento
+                c.tipo_demanda = f"Contrato ({c.get_tipo_display()})"
+
             demandas_unificadas = sorted(
-                chain(funcionarios, probatorios, anotacoes),
+                chain(funcionarios, probatorios, anotacoes, contratos),
                 key=attrgetter('data_exibicao')
             )
             
@@ -63,8 +70,13 @@ class IndexView(TemplateView):
                 prazo__month=hoje.month,
                 prazo__year=hoje.year
             ).values_list('prazo__day', flat=True))
+
+            dias_contrato = set(Contrato.objects.filter(
+                data_encerramento__month=hoje.month,
+                data_encerramento__year=hoje.year
+            ).exclude(status='FI').values_list('data_encerramento__day', flat=True))
             
             lista['dias_calendario'] = range(1, ultimo_dia + 1) 
-            lista['dias_destaque'] = dias_progressao | dias_probatorio | dias_anotacao
+            lista['dias_destaque'] = dias_progressao | dias_probatorio | dias_anotacao | dias_contrato
             
         return lista
