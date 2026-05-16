@@ -9,6 +9,6 @@ class ProbatorioAdmin(admin.ModelAdmin):
 
 @admin.register(Contrato)
 class ContratoAdmin(admin.ModelAdmin):
-    list_display=['nome','matricula','vaga','data_inicio','data_encerramento','prazo','suap','comentario', 'tipo']
-    list_filter=['tipo','nome','matricula','prazo','data_encerramento']
-    search_fields=['nome','matricula','vaga']
+    list_display=['nome', 'matricula', 'vaga', 'data_inicio', 'data_encerramento', 'prazo', 'status', 'suap', 'comentario']
+    list_filter=['tipo', 'status', 'nome', 'matricula', 'prazo', 'data_encerramento']
+    search_fields=['nome', 'matricula', 'vaga']

@@ -37,7 +37,16 @@
                             <input type="date" name="prazo" class="form-control border-dark" value="{{ substituto.prazo|date:'Y-m-d' }}">
                         </div>
 
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Status<span class="text-danger">*</span></label>
+                            <select name="status" class="form-select border-dark" required>
+                                {% for code, label in status_choices %}
+                                    <option value="{{ code }}" {% if substituto.status == code %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Suap</label>
                             <input type="url" name="suap" class="form-control border-dark" value="{{ substituto.suap|default_if_none:'' }}">
                         </div>

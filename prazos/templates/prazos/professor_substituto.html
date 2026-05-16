@@ -38,6 +38,7 @@
                         <th scope="col">Data Início</th>
                         <th scope="col">Data Encerramento</th>
                         <th scope="col">Prazo</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Comentários</th>
                         <th scope="col" class="text-center">Suap</th>
                         <th scope="col" class="text-center">Ações</th>
@@ -45,13 +46,15 @@
                 </thead>
                 <tbody>
                     {% for substituto in substitutos %}
-                        <tr class="{% if substituto.esta_atrasado %}table-danger{% endif %}">
+                        <tr class="{% if substituto.status == 'PE' %}table-danger{% elif substituto.status == 'FI' %}table-success{% endif %}">
                             <td class="fw-semibold">{{ substituto.nome }}</td>
                             <td>{{ substituto.matricula|default:"-" }}</td>
                             <td>{{ substituto.vaga|default:"-" }}</td>
                             <td>{{ substituto.data_inicio|date:"d/m/Y"|default:"-" }}</td>
                             <td>{{ substituto.data_encerramento|date:"d/m/Y"|default:"-" }}</td>
                             <td>{{ substituto.prazo|date:"d/m/Y"|default:"-" }}</td>
+                            
+                            <td>{{ substituto.get_status_display|default:"-" }}</td>
 
                             <td style="max-width: 200px;" class="text-truncate" title="{{ substituto.comentario }}">
                                 {{ substituto.comentario|default:"" }}

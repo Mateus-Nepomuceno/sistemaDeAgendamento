@@ -73,10 +73,15 @@ class SubstitutoListView(LoginRequiredMixin, ListView):
             )
         return lista
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = Contrato.Status.choices
+        return context
+
 
 class SubstitutoCreateView(LoginRequiredMixin, CreateView):
     model = Contrato
-    fields = ['matricula','nome','vaga','data_inicio','prazo','suap','comentario']
+    fields = ['matricula','nome','vaga','data_inicio','prazo','status','suap','comentario']
     success_url = reverse_lazy('prazos:professor_substituto')
 
     def form_valid(self, form):
@@ -91,7 +96,7 @@ class SubstitutoUpdateView(LoginRequiredMixin, UpdateView):
     model = Contrato
     queryset = Contrato.objects.filter(tipo=Contrato.Tipo.SUBSTITUTO)
 
-    fields = ['matricula','nome','vaga','data_inicio', 'prazo','suap','comentario']
+    fields = ['matricula','nome','vaga','data_inicio', 'prazo', 'status','suap','comentario']
     success_url = reverse_lazy('prazos:professor_substituto')
 
     def get(self, request, *args, **kwargs):

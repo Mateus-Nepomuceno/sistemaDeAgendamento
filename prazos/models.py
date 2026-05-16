@@ -52,6 +52,11 @@ class Contrato(models.Model):
         SUBSTITUTO = 'SU','Substituto'
         ESTAGIARIO = 'EG','Estagiário'
 
+    class Status(models.TextChoices):
+        EM_ANDAMENTO = 'EA','Em andamento'
+        FINALIZADO = 'FI', 'Finalizado'
+        PENDENTE = 'PE','Pendente'
+
     nome = models.CharField(max_length=100,verbose_name='nome')
     matricula = models.CharField(max_length=50)
     vaga = models.CharField(max_length=100, verbose_name='Contrato')
@@ -72,16 +77,12 @@ class Contrato(models.Model):
         verbose_name='Tipo',
     )
 
-    @property
-    def esta_atrasado(self):
-        hoje = timezone.now().date()
-        if not self.data_encerramento:
-            return False
-
-        if self.prazo:
-            return self.prazo < hoje
-
-        return self.data_encerramento < hoje
+    status = models.CharField(
+        max_length=2,
+        choices=Status.choices,
+        verbose_name='Status',
+        default=Status.EM_ANDAMENTO
+    )
     
     def save(self, *args, **kwargs):
         if self.data_inicio:
