@@ -59,7 +59,7 @@ class ProbatorioDeleteView(LoginRequiredMixin, DeleteView):
 class SubstitutoListView(LoginRequiredMixin, ListView):
     model = Contrato
     template_name = 'prazos/professor_substituto.html'
-    context_object_name = 'contratos'
+    context_object_name = 'substitutos'
 
     def get_queryset(self):
         lista = Contrato.objects.filter(tipo=Contrato.Tipo.SUBSTITUTO)
@@ -78,6 +78,10 @@ class SubstitutoCreateView(LoginRequiredMixin, CreateView):
     model = Contrato
     fields = ['matricula','nome','vaga','data_inicio','prazo','suap','comentario']
     success_url = reverse_lazy('prazos:professor_substituto')
+
+    def form_valid(self, form):
+        form.instance.tipo = Contrato.Tipo.SUBSTITUTO
+        return super().form_valid(form)
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])

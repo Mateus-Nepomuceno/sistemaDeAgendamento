@@ -1,5 +1,6 @@
 from django.db import models
 from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
 class Probatorio(models.Model):
     class Status(models.TextChoices):
@@ -71,6 +72,17 @@ class Contrato(models.Model):
         verbose_name='Tipo',
     )
 
+    @property
+    def esta_atrasado(self):
+        hoje = timezone.now().date()
+        if not self.data_encerramento:
+            return False
+
+        if self.prazo:
+            return self.prazo < hoje
+
+        return self.data_encerramento < hoje
+    
     def save(self, *args, **kwargs):
         if self.data_inicio:
             self.data_encerramento = self.data_inicio + relativedelta(years=1)
