@@ -19,14 +19,16 @@ class IndexView(TemplateView):
             fim_mes = hoje.replace(day=ultimo_dia)
             
             funcionarios = Funcionario.objects.filter(
-                proxima_progressao__lte=fim_mes
+                proxima_progressao__year=hoje.year,
+                proxima_progressao__month=hoje.month
             ).exclude(status='FI')
             for f in funcionarios:
                 f.data_exibicao = f.proxima_progressao
                 f.tipo_demanda = "Progressão"
 
             probatorios = Probatorio.objects.filter(
-                data_encerramento__lte=fim_mes
+                data_encerramento__year=hoje.year,
+                data_encerramento__month=hoje.month
             ).exclude(avaliacao_3='FI')
             for p in probatorios:
                 p.data_exibicao = p.data_encerramento
@@ -34,7 +36,8 @@ class IndexView(TemplateView):
 
             anotacoes = Anotacao.objects.filter(
                 usuario=self.request.user,
-                prazo__lte=fim_mes
+                prazo__year=hoje.year,
+                prazo__month=hoje.month
             )
             for a in anotacoes:
                 a.data_exibicao = a.prazo
@@ -42,7 +45,8 @@ class IndexView(TemplateView):
                 a.nome = a.titulo
 
             contratos = Contrato.objects.filter(
-                data_encerramento__lte=fim_mes
+                data_encerramento__year=hoje.year,
+                data_encerramento__month=hoje.month
             ).exclude(status='FI')
             for c in contratos:
                 c.data_exibicao = c.data_encerramento

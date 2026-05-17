@@ -117,6 +117,62 @@ class SubstitutoDeleteView(LoginRequiredMixin, DeleteView):
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
 
+class EstagioListView(LoginRequiredMixin, ListView):
+    model = Contrato
+    template_name = 'prazos/estagio.html'
+    context_object_name = 'estagios'
+
+    def get_queryset(self):
+        lista = Contrato.objects.filter(tipo=Contrato.Tipo.ESTAGIARIO)
+
+        busca = self.request.GET.get('q')
+        if busca:
+            lista = lista.filter(
+                Q(nome__icontains=busca) |
+                Q(matricula__icontains=busca)
+            )
+        return lista
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = Contrato.Status.choices
+        return context
+
+
+class EstagioCreateView(LoginRequiredMixin, CreateView):
+    model = Contrato
+    fields = ['matricula','nome','data_inicio','prazo','status','suap','comentario']
+    success_url = reverse_lazy('prazos:estagio')
+
+    def form_valid(self, form):
+        form.instance.tipo = Contrato.Tipo.ESTAGIARIO
+        return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
+
+
+class EstagioUpdateView(LoginRequiredMixin, UpdateView):
+    model = Contrato
+    queryset = Contrato.objects.filter(tipo=Contrato.Tipo.ESTAGIARIO)
+
+    fields = ['matricula','nome','data_inicio', 'prazo', 'status','suap','comentario']
+    success_url = reverse_lazy('prazos:estagio')
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
+
+
+class EstagioDeleteView(LoginRequiredMixin, DeleteView):
+    model = Contrato
+    success_url = reverse_lazy('prazos:estagio')
+
+    def get_queryset(self):
+        return Contrato.objects.filter(tipo=Contrato.Tipo.ESTAGIARIO)
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
+
 @login_required
 def upload_prazos_csv(request):
     if request.method != 'POST':
@@ -129,7 +185,7 @@ def upload_prazos_csv(request):
     elif tipo == 'SU':
         fallback_url = 'prazos:professor_substituto'
     elif tipo == 'EG':
-        fallback_url = 'prazos:professor_substituto'
+        fallback_url = 'prazos:estagio'
     else:
         return HttpResponseBadRequest("Tipo de importação inválido ou não informado.")
 

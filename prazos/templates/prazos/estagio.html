@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Estágios {% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5 px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-5 fw-bold">Estágios</h1>
+        
+        <div class="d-flex gap-2">
+            <form action="{% url 'prazos:importar_csv' %}" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
+                {% csrf_token %}
+                <input type="hidden" name="tipo_importacao" value="EG">
+            
+                <div class="input-group shadow-sm">
+                    <input type="file" name="arquivo_csv" id="csvContrato" accept=".csv" class="d-none" required>
+                
+                    <label for="csvContrato" id="labelCsvContrato" class="btn btn-outline-dark text-truncate mb-0" style="border-top-left-radius: 8px; border-bottom-left-radius: 8px; max-width: 250px; cursor: pointer;">
+                        <i class="bi bi-upload me-2"></i>Escolher arquivo
+                    </label>
+                
+                    <button type="submit" class="btn btn-success">
+                        Importar
+                    </button>
+                </div>
+            </form>
+
+            <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#modalNovoEstagio">
+                <i class="bi bi-plus-circle me-2"></i>Novo Estágio
+            </button>
+        </div>
+    </div>
+
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-9">
+            <input type="text" name="q" class="form-control border-dark" 
+                    placeholder="Buscar por nome ou matrícula..." 
+                    value="{{ request.GET.q|default:'' }}">
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-dark w-100">
+                <i class="bi bi-search me-2"></i>Buscar
+            </button>
+        </div>
+    </form>
+
+    {% if estagios %}
+        <div class="table-responsive shadow rounded-3 bg-white">
+            <table class="table table-hover table-striped table-bordered align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Matrícula</th>
+                        <th scope="col">Data Início</th>
+                        <th scope="col">Data Encerramento</th>
+                        <th scope="col">Prazo</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Comentários</th>
+                        <th scope="col" class="text-center">Suap</th>
+                        <th scope="col" class="text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estagio in estagios %}
+                        <tr class="{% if estagio.status == 'PE' %}table-danger{% elif estagio.status == 'FI' %}table-success{% endif %}">
+                            <td class="fw-semibold">{{ estagio.nome }}</td>
+                            <td>{{ estagio.matricula|default:"-" }}</td>
+                            <td>{{ estagio.data_inicio|date:"d/m/Y"|default:"-" }}</td>
+                            <td>{{ estagio.data_encerramento|date:"d/m/Y"|default:"-" }}</td>
+                            <td>{{ estagio.prazo|date:"d/m/Y"|default:"-" }}</td>
+                            
+                            <td>{{ estagio.get_status_display|default:"-" }}</td>
+
+                            <td style="max-width: 200px;" class="text-truncate" title="{{ estagio.comentario }}">
+                                {{ estagio.comentario|default:"" }}
+                            </td>
+
+                            <td class="text-center">
+                                {% if estagio.suap %}
+                                <div class="d-flex justify-content-center">
+                                    <a href="{{ estagio.suap }}" target="_blank" class="btn btn-sm btn-success">
+                                        <i class="bi bi-folder-fill"></i>
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </td>
+
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditar{{ estagio.pk }}" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    
+                                    <button type="button" class="btn btn-sm btn-danger text-dark" data-bs-toggle="modal" data-bs-target="#modalExcluir{{ estagio.pk }}" title="Apagar">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        {% include 'includes/estagios/editar.html' %}
+                        {% include 'includes/estagios/excluir.html' %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-light border shadow-sm">Nenhum estágio encontrado.</div>
+    {% endif %}
+</div>
+
+{% include 'includes/estagios/criar.html' %}
+<script src="{% static 'js/upload.js' %}"></script>
+{% endblock %}
