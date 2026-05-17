@@ -29,7 +29,7 @@ O sistema exige autenticação e oferece os seguintes módulos:
 
 #### Gestão de Prazos (`/prazos/`)
 * **Estágio Probatório:** Acompanhamento detalhado das 3 avaliações obrigatórias.
-* **Contratos Temporários:** Gestão de Professores Substitutos com controle de vigência.
+* **Contratos Temporários:** Gestão de Professores Substitutos e Estágios com controle de vigência.
 * **Cálculo de Encerramento:** Definição automática de datas de término baseadas na data de início.
 * **Importação CSV:** Suporte para carga inicial de probatórios e contratos.
 
