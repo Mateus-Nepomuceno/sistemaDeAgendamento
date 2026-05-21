@@ -108,8 +108,8 @@
                             </td>
                         </tr>
                         
-                        {% include 'includes/probatorios/editar.html' %}
-                        {% include 'includes/probatorios/excluir.html' %}
+                        {% include 'prazos/includes/probatorios/editar.html' %}
+                        {% include 'prazos/includes/probatorios/excluir.html' %}
                     {% endfor %}
                 </tbody>
             </table>
@@ -119,6 +119,6 @@
     {% endif %}
 </div>
 
-{% include 'includes/probatorios/criar.html' %}
+{% include 'prazos/includes/probatorios/criar.html' %}
 <script src="{% static 'js/upload.js' %}"></script>
 {% endblock %}

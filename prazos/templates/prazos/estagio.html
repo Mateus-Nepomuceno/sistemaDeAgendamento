@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container-fluid mt-5 px-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="display-5 fw-bold">Estágios</h1>
+        <h1 class="display-5 fw-bold">Estágio</h1>
         
         <div class="d-flex gap-2">
             <form action="{% url 'prazos:importar_csv' %}" method="post" enctype="multipart/form-data" class="d-flex align-items-center">
@@ -98,8 +98,8 @@
                             </td>
                         </tr>
                         
-                        {% include 'includes/estagios/editar.html' %}
-                        {% include 'includes/estagios/excluir.html' %}
+                        {% include 'prazos/includes/estagios/editar.html' %}
+                        {% include 'prazos/includes/estagios/excluir.html' %}
                     {% endfor %}
                 </tbody>
             </table>
@@ -109,6 +109,6 @@
     {% endif %}
 </div>
 
-{% include 'includes/estagios/criar.html' %}
+{% include 'prazos/includes/estagios/criar.html' %}
 <script src="{% static 'js/upload.js' %}"></script>
 {% endblock %}
