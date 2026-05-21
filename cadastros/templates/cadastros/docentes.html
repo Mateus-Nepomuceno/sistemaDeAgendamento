@@ -99,8 +99,8 @@
                                 </div>
                             </td>
                         </tr>
-                        {% include 'includes/docentes/editar.html' %}
-                        {% include 'includes/docentes/excluir.html' %}
+                        {% include 'cadastros/includes/docentes/editar.html' %}
+                        {% include 'cadastros/includes/docentes/excluir.html' %}
                     {% endfor %}
                 </tbody>
             </table>
@@ -109,7 +109,7 @@
         <div class="alert alert-light">Nenhum docente encontrado.</div>
     {% endif %}
 </div>
-{% include 'includes/docentes/criar.html' %}
+{% include 'cadastros/includes/docentes/criar.html' %}
 
 <script src="{% static 'js/upload.js' %}"></script>
 {% endblock %}

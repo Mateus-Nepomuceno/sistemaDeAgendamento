@@ -100,8 +100,8 @@
                             </td>
                         </tr>
                         
-                        {% include 'includes/substitutos/editar.html' %}
-                        {% include 'includes/substitutos/excluir.html' %}
+                        {% include 'prazos/includes/substitutos/editar.html' %}
+                        {% include 'prazos/includes/substitutos/excluir.html' %}
                     {% endfor %}
                 </tbody>
             </table>
@@ -111,6 +111,6 @@
     {% endif %}
 </div>
 
-{% include 'includes/substitutos/criar.html' %}
+{% include 'prazos/includes/substitutos/criar.html' %}
 <script src="{% static 'js/upload.js' %}"></script>
 {% endblock %}
