@@ -4,7 +4,7 @@ Sistema web desenvolvido para o **Núcleo de Apoio à Gestão de Pessoas do IFBa
 
 ## Prévia
 
-![Prévia do Sistema de Agendamento](docs/previa.png)
+![Prévia do Sistema de Gestão de Pessoas e Prazos](docs/previa_sgpp.png)
 
 ## Tecnologias Utilizadas
 
