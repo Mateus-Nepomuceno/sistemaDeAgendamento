@@ -1,6 +1,6 @@
-# 📅 Sistema de Agendamento
+# 👤 Sistema de Gestão de Pessoas e Prazos
 
-Aplicação web desenvolvida para o **Núcleo de Apoio à Gestão de Pessoas do IFBaiano**, com o objetivo de gerenciar o quadro de funcionários (Docentes e Técnicos Administrativos), acompanhar estágios probatórios, contratos e fornecer um sistema de notificações inteligentes sobre prazos e progressões.
+Sistema web desenvolvido para o **Núcleo de Apoio à Gestão de Pessoas do IFBaiano**, com o objetivo de gerenciar o quadro de funcionários, acompanhar estágios probatórios, contratos e fornecer um sistema de notificações inteligentes sobre prazos e progressões.
 
 ## Prévia
 
